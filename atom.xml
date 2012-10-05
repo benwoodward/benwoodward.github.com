@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Ben Woodward</title>
+ <link href="http://benw.me/atom.xml" rel="self"/>
+ <link href="http://benw.me/"/>
+ <updated>2012-10-05T10:57:18+01:00</updated>
+ <id>http://benw.me/</id>
+ <author>
+   <name>JT</name>
+   <email>b@benw.me</email>
+ </author>
+
+ 
+ <entry>
+   <title>Sortable Bootstrap Tables (in Rails)</title>
+   <link href="http://benw.me/posts/sortable-bootstrap-tables/"/>
+   <updated>2012-10-01T00:00:00+01:00</updated>
+   <id>http://jgthms.com/posts/sortable-bootstrap-tables</id>
+   <content type="html">&lt;h3 id='overview'&gt;Overview&lt;/h3&gt;
+
+&lt;p&gt;How to add drag-and-drop reordering on a &lt;a href='http://twitter.github.com/bootstrap/'&gt;twitter-bootstrap&lt;/a&gt; table in Rails. Uses &lt;a href='https://github.com/mixonic/ranked-model'&gt;ranked-model&lt;/a&gt; and &lt;a href='http://jqueryui.com/'&gt;jQuery-UI&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id='sortable_list_gems'&gt;Sortable List Gems&lt;/h3&gt;
+
+&lt;p&gt;If you need to make a Rails resource type re-orderable, you have a couple of options in gem-land. &lt;a href='https://github.com/swanandp/acts_as_list'&gt;acts_as_list&lt;/a&gt; is probably the most popular of these. My problem with this gem is this method..&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;list.rb &lt;/span&gt;&lt;a href='https://github.com/swanandp/acts_as_list/blob/f62c43265f0e47fe7666a93849abad5aa7c5c6d3/lib/acts_as_list/active_record/acts/list.rb#L267'&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;# This has the effect of moving all the lower items down one.&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nf'&gt;increment_positions_on_lower_items&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;position&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='n'&gt;acts_as_list_class&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;unscoped&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;update_all&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='s2'&gt;&amp;quot;&lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;position_column&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; = (&lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;position_column&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; + 1)&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;&lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;scope_condition&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; AND &lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;position_column&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt; &amp;gt;= &lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;position&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&lt;span class='s2'&gt;&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt; &lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;p&gt;To change one item&amp;#8217;s position, all items in the list that follow it must have their position updated also. Once you have more than a few items in your database, changing their order ends up being very expensive and slow. There has to be a better way!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href='https://github.com/mixonic/ranked-model'&gt;ranked-model&lt;/a&gt; to the rescue - originally put together by &lt;a href='http://www.getharvest.com/'&gt;Harvest&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And here&amp;#8217;s ranked-model&amp;#8217;s solution to the problem..&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;ranker.rb &lt;/span&gt;&lt;a href='https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L119'&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;span class='line-number'&gt;11&lt;/span&gt;
+&lt;span class='line-number'&gt;12&lt;/span&gt;
+&lt;span class='line-number'&gt;13&lt;/span&gt;
+&lt;span class='line-number'&gt;14&lt;/span&gt;
+&lt;span class='line-number'&gt;15&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nf'&gt;update_index_from_position&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;case&lt;/span&gt; &lt;span class='n'&gt;position&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# snip ...&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='k'&gt;when&lt;/span&gt; &lt;span class='nb'&gt;Integer&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='n'&gt;neighbors&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='n'&gt;neighbors_at_position&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;position&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='n'&gt;min&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;neighbors&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:lower&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt; &lt;span class='p'&gt;?&lt;/span&gt; &lt;span class='n'&gt;neighbors&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:lower&lt;/span&gt;&lt;span class='o'&gt;].&lt;/span&gt;&lt;span class='n'&gt;rank&lt;/span&gt; &lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='no'&gt;RankedModel&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;MIN_RANK_VALUE&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='n'&gt;max&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;neighbors&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:upper&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt; &lt;span class='p'&gt;?&lt;/span&gt; &lt;span class='n'&gt;neighbors&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:upper&lt;/span&gt;&lt;span class='o'&gt;].&lt;/span&gt;&lt;span class='n'&gt;rank&lt;/span&gt; &lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='no'&gt;RankedModel&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;MAX_RANK_VALUE&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='n'&gt;rank_at&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;max&lt;/span&gt; &lt;span class='o'&gt;-&lt;/span&gt; &lt;span class='n'&gt;min&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;to_f&lt;/span&gt; &lt;span class='o'&gt;/&lt;/span&gt; &lt;span class='mi'&gt;2&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;ceil&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt; &lt;span class='n'&gt;min&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# snip ...&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;p&gt;So, ranked-model only performs an update operation on the item in question. It achieves this by creating a rank number that is midway between the two neighbors, these numbers are spread out across a very wide range; -8388607 to 8388607 (the extents of a signed MEDIUMINT in MySQL.&lt;/p&gt;
+
+&lt;p&gt;What happens if, after a few thousand re-sorts on a list there is actually an overlap with rank-numbers, or they end up out of range? Well, in that rare scenario the whole table will be updated..&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;ranker.rb &lt;/span&gt;&lt;a href='https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L127'&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;span class='line-number'&gt;11&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nf'&gt;assure_unique_position&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;if&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;new_record?&lt;/span&gt; &lt;span class='o'&gt;||&lt;/span&gt; &lt;span class='n'&gt;rank_changed?&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='k'&gt;unless&lt;/span&gt; &lt;span class='n'&gt;rank&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='n'&gt;rank_at&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='no'&gt;RankedModel&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;MAX_RANK_VALUE&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='k'&gt;if&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;rank&lt;/span&gt; &lt;span class='o'&gt;&amp;gt;&lt;/span&gt; &lt;span class='no'&gt;RankedModel&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;MAX_RANK_VALUE&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='o'&gt;||&lt;/span&gt; &lt;span class='n'&gt;current_at_rank&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;rank&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='n'&gt;rearrange_ranks&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;p&gt;This is much more elegant. Realistically speaking, unless you&amp;#8217;re dealing with thousands of items your web-app won&amp;#8217;t suffer the problems that this gem solves. However, ranked-model is so easy to set up that I can&amp;#8217;t see any good reason not to use it.&lt;/p&gt;
+
+&lt;h3 id='twitter_bootstrap'&gt;Twitter Bootstrap&lt;/h3&gt;
+
+&lt;p&gt;There are a few ways to add bootstrap into your project, you could find a non-less version, i.e. css, and copy in the files or you could use one of the many available gems. Most of them are engines, some of them use the original less and rely on the &lt;a href='https://github.com/metaskills/less-rails'&gt;less-rails&lt;/a&gt; gem to translate it. I often use &lt;a href='http://compass-style.org'&gt;compass&lt;/a&gt; in Rails apps, so it would seem that the &lt;a href='https://github.com/vwall/compass-twitter-bootstrap'&gt;compass-twitter-bootstrap&lt;/a&gt; gem is a good option.&lt;/p&gt;
+
+&lt;h4 id='table_markup'&gt;Table Markup&lt;/h4&gt;
+
+&lt;p&gt;Now you can add your bootstrap markup for a table to the index view-template, (sorry haml-haters!).&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;views/admin/things/index.html.haml  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;span class='line-number'&gt;11&lt;/span&gt;
+&lt;span class='line-number'&gt;12&lt;/span&gt;
+&lt;span class='line-number'&gt;13&lt;/span&gt;
+&lt;span class='line-number'&gt;14&lt;/span&gt;
+&lt;span class='line-number'&gt;15&lt;/span&gt;
+&lt;span class='line-number'&gt;16&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='haml'&gt;&lt;span class='line'&gt;&lt;span class='nt'&gt;%table&lt;/span&gt;&lt;span class='nc'&gt;.table.table-bordered.table-striped&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nt'&gt;%thead&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nt'&gt;%tr&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Title&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Description&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt; &amp;amp;nbsp;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nt'&gt;%tbody&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='p'&gt;-&lt;/span&gt; &lt;span class='vi'&gt;@things&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;each&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%tr&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;description&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;truncate&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='mi'&gt;20&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;edit&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;edit_admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-primary&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;destroy&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='nb'&gt;method&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='ss'&gt;:delete&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;confirm&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Are you sure?&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-danger&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;h4 id='sort_action'&gt;Sort Action&lt;/h4&gt;
+
+&lt;p&gt;Next you&amp;#8217;ll need to add the #sort action to your controller..&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;controllers/admin/things_controller.rb  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;span class='line-number'&gt;11&lt;/span&gt;
+&lt;span class='line-number'&gt;12&lt;/span&gt;
+&lt;span class='line-number'&gt;13&lt;/span&gt;
+&lt;span class='line-number'&gt;14&lt;/span&gt;
+&lt;span class='line-number'&gt;15&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;Admin&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;ThingsController&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='no'&gt;Admin&lt;/span&gt;&lt;span class='o'&gt;::&lt;/span&gt;&lt;span class='no'&gt;ApplicationController&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;def&lt;/span&gt; &lt;span class='nf'&gt;sort&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='vi'&gt;@thing&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;find&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:id&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# .attributes is a useful shorthand for mass-assigning&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# values via a hash&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='vi'&gt;@thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;attributes&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:thing&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='vi'&gt;@thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;save&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# this action will be called via ajax&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='n'&gt;render&lt;/span&gt; &lt;span class='n'&gt;nothing&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='kp'&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;p&gt;Don&amp;#8217;t forget to add a route for it!&lt;/p&gt;
+
+&lt;p&gt;Now we can add some Javascript..&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/application.js  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='javascript'&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;//= require jquery&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;//= require jquery_ujs&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;//= require jquery.ui.sortable&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;//= require jquery.effects.highlight&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;//= require ./sort&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/sort.js.coffee  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;span class='line-number'&gt;11&lt;/span&gt;
+&lt;span class='line-number'&gt;12&lt;/span&gt;
+&lt;span class='line-number'&gt;13&lt;/span&gt;
+&lt;span class='line-number'&gt;14&lt;/span&gt;
+&lt;span class='line-number'&gt;15&lt;/span&gt;
+&lt;span class='line-number'&gt;16&lt;/span&gt;
+&lt;span class='line-number'&gt;17&lt;/span&gt;
+&lt;span class='line-number'&gt;18&lt;/span&gt;
+&lt;span class='line-number'&gt;19&lt;/span&gt;
+&lt;span class='line-number'&gt;20&lt;/span&gt;
+&lt;span class='line-number'&gt;21&lt;/span&gt;
+&lt;span class='line-number'&gt;22&lt;/span&gt;
+&lt;span class='line-number'&gt;23&lt;/span&gt;
+&lt;span class='line-number'&gt;24&lt;/span&gt;
+&lt;span class='line-number'&gt;25&lt;/span&gt;
+&lt;span class='line-number'&gt;26&lt;/span&gt;
+&lt;span class='line-number'&gt;27&lt;/span&gt;
+&lt;span class='line-number'&gt;28&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='coffeescript'&gt;&lt;span class='line'&gt;&lt;span class='nx'&gt;jQuery&lt;/span&gt; &lt;span class='o'&gt;-&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='c1'&gt;# this is a small hack; when a tr is dragged with jQuery UI sortable&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='c1'&gt;# the cells lose their width&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nv'&gt;cells = &lt;/span&gt;&lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;.table&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;find&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;tr&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;)[&lt;/span&gt;&lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;].&lt;/span&gt;&lt;span class='nx'&gt;cells&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;length&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nv'&gt;desired_width = &lt;/span&gt;&lt;span class='mi'&gt;940&lt;/span&gt; &lt;span class='o'&gt;/&lt;/span&gt; &lt;span class='nx'&gt;cells&lt;/span&gt; &lt;span class='o'&gt;+&lt;/span&gt; &lt;span class='s'&gt;&amp;#39;px&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;.table td&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;css&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;width&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='nx'&gt;desired_width&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;sortable&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nv'&gt;axis: &lt;/span&gt;&lt;span class='s'&gt;&amp;#39;y&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nv'&gt;items: &lt;/span&gt;&lt;span class='s'&gt;&amp;#39;.item&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# highlight the row on drop to indicate an update&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nv'&gt;stop: &lt;/span&gt;&lt;span class='nf'&gt;(e, ui) -&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nx'&gt;ui&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;item&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;children&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;td&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;effect&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;highlight&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='p'&gt;{},&lt;/span&gt; &lt;span class='mi'&gt;1000&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nv'&gt;update: &lt;/span&gt;&lt;span class='nf'&gt;(e, ui) -&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nv'&gt;item_id = &lt;/span&gt;&lt;span class='nx'&gt;ui&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;item&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;data&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nv'&gt;position = &lt;/span&gt;&lt;span class='nx'&gt;ui&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;item&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;index&lt;/span&gt;&lt;span class='p'&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='nx'&gt;ajax&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nv'&gt;type: &lt;/span&gt;&lt;span class='s'&gt;&amp;#39;POST&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nv'&gt;url: &lt;/span&gt;&lt;span class='nx'&gt;$&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='k'&gt;this&lt;/span&gt;&lt;span class='p'&gt;).&lt;/span&gt;&lt;span class='nx'&gt;data&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='s'&gt;&amp;#39;update_url&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nv'&gt;dataType: &lt;/span&gt;&lt;span class='s'&gt;&amp;#39;json&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='c1'&gt;# the :thing hash gets passed to @thing.attributes&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='c1'&gt;# row_order is the default column name expected in ranked-model&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nv'&gt;data: &lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='nv'&gt;id: &lt;/span&gt;&lt;span class='nx'&gt;item_id&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='nv'&gt;thing: &lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='nv'&gt;row_order_position: &lt;/span&gt;&lt;span class='nx'&gt;position&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;p&gt;Next we need to add into the markup the data expected by the Javascript.&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;views/admin/things/index.html.haml  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;span class='line-number'&gt;11&lt;/span&gt;
+&lt;span class='line-number'&gt;12&lt;/span&gt;
+&lt;span class='line-number'&gt;13&lt;/span&gt;
+&lt;span class='line-number'&gt;14&lt;/span&gt;
+&lt;span class='line-number'&gt;15&lt;/span&gt;
+&lt;span class='line-number'&gt;16&lt;/span&gt;
+&lt;span class='line-number'&gt;17&lt;/span&gt;
+&lt;span class='line-number'&gt;18&lt;/span&gt;
+&lt;span class='line-number'&gt;19&lt;/span&gt;
+&lt;span class='line-number'&gt;20&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='haml'&gt;&lt;span class='line'&gt;# the update url is passed via an html5 data attribute
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='nt'&gt;%table&lt;/span&gt;&lt;span class='nc'&gt;.table.table-bordered.table-striped&lt;/span&gt;&lt;span class='nf'&gt;#sortable&lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='ss'&gt;:data&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;update_url&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='n'&gt;admin_sort_thing_path&lt;/span&gt;&lt;span class='p'&gt;}&lt;/span&gt;}
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nt'&gt;%thead&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nt'&gt;%tr&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Title&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Description&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt; &amp;amp;nbsp;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nt'&gt;%tbody&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='p'&gt;-&lt;/span&gt; &lt;span class='vi'&gt;@things&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;each&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt; &lt;span class='o'&gt;|&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;      # make the &amp;lt;tr&amp;gt;&amp;#39;s draggable by adding the expected &amp;#39;.item&amp;#39; class
+&lt;/span&gt;&lt;span class='line'&gt;      # pass the item id into params[:id]
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%tr&lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;data&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;item_id&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;&lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&amp;quot;}, class: &amp;#39;item&amp;#39;}
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;description&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;truncate&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='mi'&gt;20&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;edit&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;edit_admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-primary&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;destroy&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='nb'&gt;method&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='ss'&gt;:delete&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;confirm&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Are you sure?&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-danger&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</content>
+ </entry>
+ 
+ 
+</feed>
