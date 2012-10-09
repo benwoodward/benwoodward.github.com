@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2012-10-05T10:57:18+01:00</updated>
+ <updated>2012-10-09T12:34:40+01:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -20,6 +20,8 @@
    <content type="html">&lt;h3 id='overview'&gt;Overview&lt;/h3&gt;
 
 &lt;p&gt;How to add drag-and-drop reordering on a &lt;a href='http://twitter.github.com/bootstrap/'&gt;twitter-bootstrap&lt;/a&gt; table in Rails. Uses &lt;a href='https://github.com/mixonic/ranked-model'&gt;ranked-model&lt;/a&gt; and &lt;a href='http://jqueryui.com/'&gt;jQuery-UI&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt='sortable bootstrap' src='/images/sortable.gif' /&gt;&lt;/p&gt;
 
 &lt;h3 id='sortable_list_gems'&gt;Sortable List Gems&lt;/h3&gt;
 
@@ -291,6 +293,19 @@
 &lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;edit&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;edit_admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-primary&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;destroy&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='nb'&gt;method&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='ss'&gt;:delete&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;confirm&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Are you sure?&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-danger&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+&lt;p&gt;Finally, to indicate that the items are re-orderable I chose to change the cursor to row-resize pointer.&lt;/p&gt;
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;assets/stylesheets/admin/application.css.scss  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='scss'&gt;&lt;span class='line'&gt;&lt;span class='nn'&gt;#sortable&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nt'&gt;tr&lt;/span&gt;&lt;span class='nc'&gt;.item&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='na'&gt;cursor&lt;/span&gt;&lt;span class='o'&gt;:&lt;/span&gt; &lt;span class='n'&gt;row-resize&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='p'&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='p'&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</content>
  </entry>
  

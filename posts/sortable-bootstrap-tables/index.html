@@ -15,6 +15,8 @@
 
 <p>How to add drag-and-drop reordering on a <a href='http://twitter.github.com/bootstrap/'>twitter-bootstrap</a> table in Rails. Uses <a href='https://github.com/mixonic/ranked-model'>ranked-model</a> and <a href='http://jqueryui.com/'>jQuery-UI</a>.</p>
 
+<p><img alt='sortable bootstrap' src='/images/sortable.gif' /></p>
+
 <h3 id='sortable_list_gems'>Sortable List Gems</h3>
 
 <p>If you need to make a Rails resource type re-orderable, you have a couple of options in gem-land. <a href='https://github.com/swanandp/acts_as_list'>acts_as_list</a> is probably the most popular of these. My problem with this gem is this method..</p>
@@ -285,6 +287,19 @@
 </span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;show&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn&#39;</span>
 </span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;edit&#39;</span><span class='p'>,</span> <span class='n'>edit_admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-primary&#39;</span>
 </span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;destroy&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='nb'>method</span><span class='p'>:</span> <span class='ss'>:delete</span><span class='p'>,</span> <span class='n'>confirm</span><span class='p'>:</span> <span class='s2'>&quot;Are you sure?&quot;</span><span class='p'>,</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-danger&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Finally, to indicate that the items are re-orderable I chose to change the cursor to row-resize pointer.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>assets/stylesheets/admin/application.css.scss  </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class='nn'>#sortable</span> <span class='p'>{</span>
+</span><span class='line'>  <span class='nt'>tr</span><span class='nc'>.item</span> <span class='p'>{</span>
+</span><span class='line'>    <span class='na'>cursor</span><span class='o'>:</span> <span class='n'>row-resize</span><span class='p'>;</span>
+</span><span class='line'>  <span class='p'>}</span>
+</span><span class='line'><span class='p'>}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 </article>
 
