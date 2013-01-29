@@ -8,7 +8,7 @@
     <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="Ruby on Rails Developer">
 	</head>
   <body>
-    <header id="banner" class="navbar">
+    <header class="banner navbar navbar-static-top">
       <div class="navbar-inner">
         <a class="brand" href="http://benw.me"></a>
         <h3>Ben Woodward</h3>
@@ -37,10 +37,14 @@
           </p>
       </div>
     </header>
-    <article data-id="postssortable-bootstrap-tables">
+    <div id="wrap">
+      <article data-id="postssortable-bootstrap-tables">
+  <header>
   <h1>Sortable Bootstrap Tables (in Rails)</h1>
   <time>01 Oct 2012</time>
-  <h3 id='overview'>Overview</h3>
+  </header>
+  <div class="entry-content">
+    <h3 id='overview'>Overview</h3>
 
 <p>How to add drag-and-drop reordering on a <a href='http://twitter.github.com/bootstrap/'>twitter-bootstrap</a> table in Rails. Uses <a href='https://github.com/mixonic/ranked-model'>ranked-model</a> and <a href='http://jqueryui.com/'>jQuery-UI</a>.</p>
 
@@ -330,27 +334,28 @@
 </span><span class='line'>  <span class='p'>}</span>
 </span><span class='line'><span class='p'>}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+  </div>
+  
+    <div id="comments-container">
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite">
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      <script type="text/javascript">
+        var disqus_shortname = 'benwme';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://benw.me/posts/sortable-bootstrap-tables/';
+        var disqus_url = 'http://benw.me/posts/sortable-bootstrap-tables/';
+        (function () {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+      </script>
+    </div>
+  
 </article>
 
-  <section id="comments">
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite">
-      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
     </div>
-<script type="text/javascript">
-  var disqus_shortname = 'benwme';
-  // var disqus_developer = 1;
-  var disqus_identifier = 'http://benw.me/posts/sortable-bootstrap-tables/';
-  var disqus_url = 'http://benw.me/posts/sortable-bootstrap-tables/';
-  (function () {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  }());
-</script>
-</section>
-
-
   </body>
 </html>
