@@ -67,7 +67,9 @@
 
 <p>First make your model taggable by following the instructions in the gem readme.</p>
 
-<p>The gem creates two ActiveRecord models; Tag and Tagging, the latter is an association model. Next, add a new attribute, <code>:tint</code> to the Tag model.</p>
+<p>The gem creates two ActiveRecord models; Tag and Tagging, the latter is an association model.</p>
+
+<p>We need to add a new attribute, <code>:tint</code> to the Tag model. This is where we will save a generated hex code that represents the popularity of the tag.</p>
 <div class='bogus-wrapper'><notextile><figure class='code'> <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>rails generate migration add_tint_to_tags tint:string
 </span></code></pre></td></tr></table></div></figure></notextile></div><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>20130130161730_add_tint_to_tags.rb </span></figcaption>
