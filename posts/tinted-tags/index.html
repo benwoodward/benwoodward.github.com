@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Tinted Tags</title>
+    <meta name="author" content="Ben Woodward">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0;">
+		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="Ruby on Rails Developer">
+	</head>
+  <body>
+    <header class="banner navbar navbar-static-top">
+      <div class="navbar-inner">
+        <a class="brand" href="http://benw.me"></a>
+        <h3>Ben Woodward</h3>
+          <p class="social">
+            <a href="http://twitter.com/benwooodward" class="ss-icon ss-social-circle ss-twitter"></a>
+            <a href="https://github.com/benwoodward" class="ss-icon ss-social-circle ss-octocat"></a>
+            <a href="/atom.xml" class="ss-icon ss-social-circle ss-rss"></a>
+            <a href="http://instagram.com/ben_woodward/" class="ss-icon ss-social-circle ss-instagram"></a>
+          </p>
+          <p>
+            <script type="text/javascript">
+              //<![CDATA[
+              <!--
+              var x="function f(x){var i,o=\"\",ol=x.length,l=ol;while(x.charCodeAt(l/13)!" +
+              "=55){try{x+=x;l+=l;}catch(e){}}for(i=l-1;i>=0;i--){o+=x.charAt(i);}return o" +
+              ".substr(0,ol);}f(\")701,\\\"t~veit(g{#(j4,$\\\"\\\\771\\\\\\\\\\\\300\\\\63" +
+              "0\\\\g_t030\\\\CUT@]]r220\\\\s320\\\\H@_C]010\\\\500\\\\zJHOGi530\\\\k}xvyo" +
+              "j'r{;c}wsPm4bxgche%Z8bfpi 730\\\\A^S420\\\\520\\\\530\\\\300\\\\730\\\\700\\"+
+              "\\300\\\\]600\\\\730\\\\520\\\\200\\\\330\\\\610\\\\300\\\\710\\\\\\\"(f};o" +
+              " nruter};))++y(^)i(tAedoCrahc.x(edoCrahCmorf.gnirtS=+o;721=%y;i=+y)701==i(f" +
+              "i{)++i;l<i;0=i(rof;htgnel.x=l,\\\"\\\"=o,i rav{)y,x(f noitcnuf\")"           ;
+              while(x=eval(x));
+              //-->
+              //]]>
+            </script>
+          </p>
+      </div>
+    </header>
+    <div id="wrap">
+      <article data-id="poststinted-tags">
+  <header>
+  <h2>Tinted Tags</h2>
+  <time>30 Jan 2013</time>
+  </header>
+  <div class="entry-content">
+    <h3 id='overview'>Overview</h3>
+
+<p>How to create a tag cloud in Rails that uses colour to indicate the popularity of a tag. Uses <a href='https://github.com/chriseppstein/compass'>compass</a> and <a href='https://github.com/mbleigh/acts-as-taggable-on'>acts-as-taggable-on</a> gems.</p>
+
+<h3 id='tag_clouds'>Tag Clouds</h3>
+
+<p>The purpose of the tag cloud is to highlight the most popular tags by using font size to represent tag usage. Whereas this is a useful tool for the user, if you care about good typography and keeping to the grid you probably won&#8217;t want to include one of these janky things in your sidebar.</p>
+
+<p><img alt='tag cloud' src='/images/tag_cloud.png' /></p>
+
+<p>What if there were another way to represent the popularity of each tag? <a href='http://madebymany.com/'>Made By Many</a> have taken an interesting approach in using colour to indicate tag popularity.</p>
+
+<p><a href='http://madebymany.com/blog'><img alt='made by many tag cloud' src='/images/made_by_many_tag_cloud.png' /></a></p>
+
+<p>Here&#8217;s one way to create tinted tags..</p>
+
+<h3 id='acts_as_taggable_on'>Acts As Taggable On</h3>
+
+<p><a href='https://github.com/mbleigh/acts-as-taggable-on'>acts-as-taggable-on</a> is the obvious choice for adding tagging functionality to Rails.</p>
+
+<p>First make your model taggable by following the instructions in the gem readme.</p>
+
+<p>The gem creates two ActiveRecord models; Tag and Tagging, the latter is an association model. Next, add a new attribute, <code>:tint</code> to the Tag model.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rails generate migration add_tint_to_tags tint:string
+</span></code></pre></td></tr></table></div></figure></notextile></div><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>20130130161730_add_tint_to_tags.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='k'>class</span> <span class='nc'>AddTintToTags</span> <span class='o'>&lt;</span> <span class='ss'>ActiveRecord</span><span class='p'>:</span><span class='ss'>:Migration</span>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>change</span>
+</span><span class='line'>    <span class='n'>add_column</span> <span class='ss'>:tags</span><span class='p'>,</span> <span class='ss'>:tint</span><span class='p'>,</span> <span class='ss'>:string</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h3 id='tagtinter'>TagTinter</h3>
+
+<p>First we need a way to calculate colours based on percentages.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>lib/tag_tinter.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='nb'>require</span> <span class='s1'>&#39;compass&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>class</span> <span class='nc'>TagTinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='c1'>#</span>
+</span><span class='line'>  <span class='c1'># evaluate(&quot;mix(#ffffff, #000000, 50%)&quot;) =&gt; &quot;#7f7f7f&quot;</span>
+</span><span class='line'>  <span class='c1'>#</span>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>evaluate</span><span class='p'>(</span><span class='n'>value</span><span class='p'>)</span>
+</span><span class='line'>    <span class='ss'>Sass</span><span class='p'>:</span><span class='ss'>:Script</span><span class='o'>::</span><span class='no'>Parser</span><span class='o'>.</span><span class='n'>parse</span><span class='p'>(</span><span class='n'>value</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>)</span><span class='o'>.</span><span class='n'>perform</span><span class='p'>(</span><span class='ss'>Sass</span><span class='p'>:</span><span class='ss'>:Environment</span><span class='o'>.</span><span class='n'>new</span><span class='p'>)</span><span class='o'>.</span><span class='n'>to_s</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Now we need a way to calculate tag usage as a percentage.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>lib/tag_tinter.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='k'>class</span> <span class='nc'>TagTinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>percentage_of_total</span><span class='p'>(</span><span class='n'>count</span><span class='p'>)</span>
+</span><span class='line'>    <span class='n'>total</span> <span class='o'>=</span> <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>map</span><span class='p'>(</span><span class='o'>&amp;</span><span class='ss'>:count</span><span class='p'>)</span><span class='o'>.</span><span class='n'>inject</span><span class='p'>(</span><span class='ss'>:+</span><span class='p'>)</span>
+</span><span class='line'>    <span class='p'>((</span><span class='n'>count</span> <span class='o'>*</span> <span class='mi'>100</span><span class='p'>)</span> <span class='o'>/</span> <span class='n'>total</span><span class='p'>)</span><span class='o'>.</span><span class='n'>round</span><span class='p'>(</span><span class='mi'>2</span><span class='p'>)</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Calculate tag subtotals.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>lib/tag_tinter.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='k'>class</span> <span class='nc'>TagTinter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>update_tints</span>
+</span><span class='line'>    <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span>
+</span><span class='line'>      <span class='n'>percent</span> <span class='o'>=</span> <span class='n'>percentage</span><span class='p'>(</span><span class='n'>tag</span><span class='o'>.</span><span class='n'>count</span><span class='p'>)</span>
+</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>tag_colour</span> <span class='o'>=</span> <span class='n'>evaluate</span><span class='p'>(</span><span class='s2'>&quot;mix(#ffffff, #000000, </span><span class='si'>#{</span><span class='n'>percent</span><span class='si'>}</span><span class='s2'>)&quot;</span><span class='p'>)</span>
+</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>save</span>
+</span><span class='line'>    <span class='k'>end</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>All together.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>lib/tag_tinter.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='nb'>require</span> <span class='s1'>&#39;compass&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>class</span> <span class='nc'>TagTinter</span>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>initialize</span><span class='p'>(</span><span class='n'>base</span><span class='p'>,</span> <span class='n'>tint</span><span class='p'>)</span>
+</span><span class='line'>    <span class='vi'>@base</span><span class='p'>,</span> <span class='vi'>@tint</span> <span class='o'>=</span> <span class='n'>base</span><span class='p'>,</span> <span class='n'>tint</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>update_tints</span>
+</span><span class='line'>    <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span>
+</span><span class='line'>      <span class='n'>percent</span> <span class='o'>=</span> <span class='n'>calculate_percentage</span><span class='p'>(</span><span class='n'>tag</span><span class='o'>.</span><span class='n'>count</span><span class='p'>)</span>
+</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>tag_colour</span> <span class='o'>=</span> <span class='n'>evaluate</span><span class='p'>(</span><span class='s2'>&quot;mix(</span><span class='si'>#{</span><span class='vi'>@base</span><span class='si'>}</span><span class='s2'>, </span><span class='si'>#{</span><span class='vi'>@tint</span><span class='si'>}</span><span class='s2'>, </span><span class='si'>#{</span><span class='n'>percent</span><span class='si'>}</span><span class='s2'>)&quot;</span><span class='p'>)</span>
+</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>save</span>
+</span><span class='line'>    <span class='k'>end</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='kp'>private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>calculate_percentage</span><span class='p'>(</span><span class='n'>count</span><span class='p'>)</span>
+</span><span class='line'>    <span class='n'>total</span> <span class='o'>=</span> <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>map</span><span class='p'>(</span><span class='o'>&amp;</span><span class='ss'>:count</span><span class='p'>)</span><span class='o'>.</span><span class='n'>inject</span><span class='p'>(</span><span class='ss'>:+</span><span class='p'>)</span>
+</span><span class='line'>    <span class='p'>((</span><span class='n'>count</span> <span class='o'>*</span> <span class='mi'>100</span><span class='p'>)</span> <span class='o'>/</span> <span class='n'>total</span><span class='p'>)</span><span class='o'>.</span><span class='n'>round</span><span class='p'>(</span><span class='mi'>2</span><span class='p'>)</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>evaluate</span><span class='p'>(</span><span class='n'>value</span><span class='p'>)</span>
+</span><span class='line'>    <span class='ss'>Sass</span><span class='p'>:</span><span class='ss'>:Script</span><span class='o'>::</span><span class='no'>Parser</span><span class='o'>.</span><span class='n'>parse</span><span class='p'>(</span><span class='n'>value</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>)</span><span class='o'>.</span><span class='n'>perform</span><span class='p'>(</span><span class='ss'>Sass</span><span class='p'>:</span><span class='ss'>:Environment</span><span class='o'>.</span><span class='n'>new</span><span class='p'>)</span><span class='o'>.</span><span class='n'>to_s</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h3 id='after_save_filter'>after_save Filter</h3>
+
+<p>Depending on how many taggings you have, this is a potentially expensive operation. One option would be to use a task scheduler such as <a href='https://github.com/collectiveidea/delayed_job'>delayed_job</a> or <a href='https://github.com/javan/whenever'>whenever</a> to recalculate tag tints. I chose to use an after_save callback..</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>post.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='nb'>require</span> <span class='s1'>&#39;tag_tinter&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>class</span> <span class='nc'>Post</span> <span class='o'>&lt;</span> <span class='ss'>ActiveRecord</span><span class='p'>:</span><span class='ss'>:Base</span>
+</span><span class='line'>  <span class='n'>attr_accessible</span> <span class='ss'>:title</span><span class='p'>,</span> <span class='ss'>:tag_list</span>
+</span><span class='line'>  <span class='n'>acts_as_taggable</span>
+</span><span class='line'>  <span class='n'>after_save</span> <span class='ss'>:update_tints</span><span class='p'>,</span> <span class='k'>if</span><span class='p'>:</span> <span class='ss'>:tag_list_changed?</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='kp'>private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>update_tints</span>
+</span><span class='line'>    <span class='no'>TagTinter</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='s1'>&#39;black&#39;</span><span class='p'>,</span> <span class='s1'>&#39;white&#39;</span><span class='p'>)</span><span class='o'>.</span><span class='n'>update_tints</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h3 id='displaying_the_tag_cloud'>Displaying the Tag Cloud</h3>
+
+<p>Grab all the tags from the database.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>posts_controller.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='k'>class</span> <span class='nc'>PostsController</span> <span class='o'>&lt;</span> <span class='no'>ApplicationController</span>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>index</span>
+</span><span class='line'>    <span class='vi'>@tags</span> <span class='o'>=</span> <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>order</span><span class='p'>(</span><span class='s1'>&#39;count desc&#39;</span><span class='p'>)</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Add the each tag&#8217;s colour to the its element via inline-css.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>posts/index.erb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class='x'>&lt;ul&gt;</span>
+</span><span class='line'><span class='x'>  </span><span class='cp'>&lt;%</span> <span class='vi'>@tags</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>    &lt;li style=&quot;background-color: </span><span class='cp'>&lt;%=</span> <span class='n'>tag</span><span class='o'>.</span><span class='n'>tint</span> <span class='cp'>%&gt;</span><span class='x'>; display: inline-block;&quot;&gt;</span>
+</span><span class='line'><span class='x'>      </span><span class='cp'>&lt;%=</span> <span class='n'>tag</span><span class='o'>.</span><span class='n'>name</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>    &lt;/li&gt;</span>
+</span><span class='line'><span class='x'>  </span><span class='cp'>&lt;%</span> <span class='k'>end</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>&lt;/ul&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h3 id='route_globbing'>Route Globbing</h3>
+
+<p>Using <a href='http://guides.rubyonrails.org/routing.html#route-globbing'>route globbing</a> tags can be passed as parameters to a search via the url.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>routes.rb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='ss'>YourApp</span><span class='p'>:</span><span class='ss'>:Application</span><span class='o'>.</span><span class='n'>routes</span><span class='o'>.</span><span class='n'>draw</span> <span class='k'>do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class='n'>match</span> <span class='s1'>&#39;/blog/tags/*tag&#39;</span> <span class='o'>=&gt;</span> <span class='s2'>&quot;posts#by_tag&quot;</span><span class='p'>,</span> <span class='ss'>:as</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;posts_by_tag&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class='k'>end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div><div class='bogus-wrapper'><notextile><figure class='code'><div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class PostsController &lt; ApplicationController
+</span><span class='line'>  ...
+</span><span class='line'>
+</span><span class='line'>  def by_tag
+</span><span class='line'>    @posts = Post.tagged_with(params[:tag]).order('created_at desc')
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  ...
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Now we can do this..</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>posts/index.erb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class='x'>&lt;ul&gt;</span>
+</span><span class='line'><span class='x'>  </span><span class='cp'>&lt;%</span> <span class='vi'>@tags</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>    &lt;li style=&quot;background-color: </span><span class='cp'>&lt;%=</span> <span class='n'>tag</span><span class='o'>.</span><span class='n'>tint</span> <span class='cp'>%&gt;</span><span class='x'>; display: inline-block;&quot;&gt;</span>
+</span><span class='line'><span class='x'>      </span><span class='cp'>&lt;%=</span> <span class='n'>link_to</span> <span class='n'>tag</span><span class='o'>.</span><span class='n'>name</span><span class='p'>,</span> <span class='n'>posts_by_tag_path</span><span class='p'>(</span><span class='n'>tag</span><span class='o'>.</span><span class='n'>name</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>    &lt;/li&gt;</span>
+</span><span class='line'><span class='x'>  </span><span class='cp'>&lt;%</span> <span class='k'>end</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>&lt;/ul&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Done!</p>
+
+<h3 id='tinted_tags_gem'>Tinted Tags Gem</h3>
+
+<p>For an easier way to use this code, here is a gem - <a href='https://github.com/benwoodward/tinted_tags'>tinted_tags</a></p>
+  </div>
+  
+    <div id="comments-container">
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite">
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      <script type="text/javascript">
+        var disqus_shortname = 'benwme';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://benw.me/posts/tinted-tags/';
+        var disqus_url = 'http://benw.me/posts/tinted-tags/';
+        (function () {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+      </script>
+    </div>
+  
+</article>
+
+    </div>
+  </body>
+</html>
