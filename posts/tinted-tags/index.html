@@ -137,7 +137,7 @@
 </span><span class='line'>
 </span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
 </span><span class='line'>
-</span><span class='line'>  <span class='k'>def</span> <span class='nf'>percentage_of_total</span><span class='p'>(</span><span class='n'>count</span><span class='p'>)</span>
+</span><span class='line'>  <span class='k'>def</span> <span class='nf'>calculate_percentage</span><span class='p'>(</span><span class='n'>count</span><span class='p'>)</span>
 </span><span class='line'>    <span class='n'>total</span> <span class='o'>=</span> <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>map</span><span class='p'>(</span><span class='o'>&amp;</span><span class='ss'>:count</span><span class='p'>)</span><span class='o'>.</span><span class='n'>inject</span><span class='p'>(</span><span class='ss'>:+</span><span class='p'>)</span>
 </span><span class='line'>    <span class='p'>((</span><span class='n'>count</span> <span class='o'>*</span> <span class='mi'>100</span><span class='p'>)</span> <span class='o'>/</span> <span class='n'>total</span><span class='p'>)</span><span class='o'>.</span><span class='n'>round</span><span class='p'>(</span><span class='mi'>2</span><span class='p'>)</span>
 </span><span class='line'>  <span class='k'>end</span>
@@ -159,20 +159,12 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class='k'>class</span> <span class='nc'>TagTinter</span>
 </span><span class='line'>
 </span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
 </span><span class='line'>
-</span><span class='line'>  <span class='k'>def</span> <span class='nf'>update_tints</span>
-</span><span class='line'>    <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span>
-</span><span class='line'>      <span class='n'>percent</span> <span class='o'>=</span> <span class='n'>percentage</span><span class='p'>(</span><span class='n'>tag</span><span class='o'>.</span><span class='n'>count</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>tag_colour</span> <span class='o'>=</span> <span class='n'>evaluate</span><span class='p'>(</span><span class='s2'>&quot;mix(#ffffff, #000000, </span><span class='si'>#{</span><span class='n'>percent</span><span class='si'>}</span><span class='s2'>)&quot;</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>save</span>
-</span><span class='line'>    <span class='k'>end</span>
+</span><span class='line'>  <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span>
+</span><span class='line'>    <span class='n'>percent</span> <span class='o'>=</span> <span class='n'>calculate_percentage</span><span class='p'>(</span><span class='n'>tag</span><span class='o'>.</span><span class='n'>count</span><span class='p'>)</span>
 </span><span class='line'>  <span class='k'>end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
@@ -217,7 +209,7 @@
 </span><span class='line'>  <span class='k'>def</span> <span class='nf'>update_tints</span>
 </span><span class='line'>    <span class='no'>Post</span><span class='o'>.</span><span class='n'>tag_counts_on</span><span class='p'>(</span><span class='ss'>:tags</span><span class='p'>)</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>tag</span><span class='o'>|</span>
 </span><span class='line'>      <span class='n'>percent</span> <span class='o'>=</span> <span class='n'>calculate_percentage</span><span class='p'>(</span><span class='n'>tag</span><span class='o'>.</span><span class='n'>count</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>tag_colour</span> <span class='o'>=</span> <span class='n'>evaluate</span><span class='p'>(</span><span class='s2'>&quot;mix(</span><span class='si'>#{</span><span class='vi'>@base</span><span class='si'>}</span><span class='s2'>, </span><span class='si'>#{</span><span class='vi'>@tint</span><span class='si'>}</span><span class='s2'>, </span><span class='si'>#{</span><span class='n'>percent</span><span class='si'>}</span><span class='s2'>)&quot;</span><span class='p'>)</span>
+</span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>tint</span> <span class='o'>=</span> <span class='n'>evaluate</span><span class='p'>(</span><span class='s2'>&quot;mix(</span><span class='si'>#{</span><span class='vi'>@base</span><span class='si'>}</span><span class='s2'>, </span><span class='si'>#{</span><span class='vi'>@tint</span><span class='si'>}</span><span class='s2'>, </span><span class='si'>#{</span><span class='n'>percent</span><span class='si'>}</span><span class='s2'>)&quot;</span><span class='p'>)</span>
 </span><span class='line'>      <span class='n'>tag</span><span class='o'>.</span><span class='n'>save</span>
 </span><span class='line'>    <span class='k'>end</span>
 </span><span class='line'>  <span class='k'>end</span>
