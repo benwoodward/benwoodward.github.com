@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2013-01-30T04:04:04+00:00</updated>
+ <updated>2013-01-30T04:16:56+00:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -252,7 +252,7 @@
 &lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-&lt;p&gt;Add the each tag&amp;#8217;s colour to the its element via inline-css.&lt;/p&gt;
+&lt;p&gt;Add the each tag&amp;#8217;s colour to its html element via inline-css.&lt;/p&gt;
 &lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;posts/index.erb &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
 &lt;span class='line-number'&gt;2&lt;/span&gt;
@@ -317,6 +317,19 @@
 &lt;/span&gt;&lt;span class='line'&gt;&lt;span class='x'&gt;    &amp;lt;/li&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;&lt;span class='x'&gt;  &lt;/span&gt;&lt;span class='cp'&gt;&amp;lt;%&lt;/span&gt; &lt;span class='k'&gt;end&lt;/span&gt; &lt;span class='cp'&gt;%&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
 &lt;/span&gt;&lt;span class='line'&gt;&lt;span class='x'&gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;posts/by_tag.erb &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='erb'&gt;&lt;span class='line'&gt;&lt;span class='x'&gt;&amp;lt;h2&amp;gt; Tag: &lt;/span&gt;&lt;span class='cp'&gt;&amp;lt;%=&lt;/span&gt; &lt;span class='n'&gt;params&lt;/span&gt;&lt;span class='o'&gt;[&lt;/span&gt;&lt;span class='ss'&gt;:tag&lt;/span&gt;&lt;span class='o'&gt;]&lt;/span&gt; &lt;span class='cp'&gt;%&amp;gt;&lt;/span&gt;&lt;span class='x'&gt; &amp;lt;/h2&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='x'&gt;&amp;lt;h3&amp;gt; &lt;/span&gt;&lt;span class='cp'&gt;&amp;lt;%=&lt;/span&gt; &lt;span class='vi'&gt;@posts&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;count&lt;/span&gt; &lt;span class='cp'&gt;%&amp;gt;&lt;/span&gt;&lt;span class='x'&gt; posts &amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='cp'&gt;&amp;lt;%&lt;/span&gt; &lt;span class='k'&gt;unless&lt;/span&gt; &lt;span class='vi'&gt;@posts&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;blank?&lt;/span&gt; &lt;span class='cp'&gt;%&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='x'&gt;  &lt;/span&gt;&lt;span class='cp'&gt;&amp;lt;%=&lt;/span&gt; &lt;span class='n'&gt;render&lt;/span&gt; &lt;span class='vi'&gt;@posts&lt;/span&gt; &lt;span class='cp'&gt;%&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='cp'&gt;&amp;lt;%&lt;/span&gt; &lt;span class='k'&gt;end&lt;/span&gt; &lt;span class='cp'&gt;%&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 &lt;p&gt;Done!&lt;/p&gt;
 

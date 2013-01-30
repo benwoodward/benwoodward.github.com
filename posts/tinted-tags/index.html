@@ -280,7 +280,7 @@
 </span><span class='line'>  <span class='k'>end</span>
 </span><span class='line'><span class='k'>end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Add the each tag&#8217;s colour to the its element via inline-css.</p>
+<p>Add the each tag&#8217;s colour to its html element via inline-css.</p>
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>posts/index.erb </span></figcaption>
  <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -345,6 +345,19 @@
 </span><span class='line'><span class='x'>    &lt;/li&gt;</span>
 </span><span class='line'><span class='x'>  </span><span class='cp'>&lt;%</span> <span class='k'>end</span> <span class='cp'>%&gt;</span><span class='x' />
 </span><span class='line'><span class='x'>&lt;/ul&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>posts/by_tag.erb </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class='x'>&lt;h2&gt; Tag: </span><span class='cp'>&lt;%=</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:tag</span><span class='o'>]</span> <span class='cp'>%&gt;</span><span class='x'> &lt;/h2&gt;</span>
+</span><span class='line'><span class='x'>&lt;h3&gt; </span><span class='cp'>&lt;%=</span> <span class='vi'>@posts</span><span class='o'>.</span><span class='n'>count</span> <span class='cp'>%&gt;</span><span class='x'> posts &lt;/h3&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class='cp'>&lt;%</span> <span class='k'>unless</span> <span class='vi'>@posts</span><span class='o'>.</span><span class='n'>blank?</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='x'>  </span><span class='cp'>&lt;%=</span> <span class='n'>render</span> <span class='vi'>@posts</span> <span class='cp'>%&gt;</span><span class='x' />
+</span><span class='line'><span class='cp'>&lt;%</span> <span class='k'>end</span> <span class='cp'>%&gt;</span><span class='x' />
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>Done!</p>
 
