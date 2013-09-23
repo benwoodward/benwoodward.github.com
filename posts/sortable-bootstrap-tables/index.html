@@ -208,7 +208,28 @@
 </span><span class='line'><span class='k'>end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>Don&#8217;t forget to add a route for it!</p>
-
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/routes.rb  </span></figcaption>
+ <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class='n'>namespace</span> <span class='ss'>:admin</span> <span class='k'>do</span>
+</span><span class='line'>  <span class='n'>resources</span> <span class='ss'>:things</span> <span class='k'>do</span>
+</span><span class='line'>    <span class='c1'># The id param is passed via js, so we can use a generic route.</span>
+</span><span class='line'>    <span class='n'>post</span> <span class='ss'>:sort</span><span class='p'>,</span> <span class='ss'>on</span><span class='p'>:</span> <span class='ss'>:collection</span>
+</span><span class='line'>  <span class='k'>end</span>
+</span><span class='line'><span class='k'>end</span>
+</span><span class='line'>
+</span><span class='line'><span class='c1'># Which gives..</span>
+</span><span class='line'>
+</span><span class='line'><span class='c1'># sort_admin_things  POST  /admin/things/sort(.:format)  admin/things#sort</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>Now we can add some Javascript..</p>
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>assets/javascripts/admin/application.js  </span></figcaption>
  <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
@@ -301,8 +322,10 @@
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
+<span class='line-number'>21</span>
 </pre></td><td class='code'><pre><code class='haml'><span class='line'># the update url is passed via an html5 data attribute
-</span><span class='line'><span class='nt'>%table</span><span class='nc'>.table.table-bordered.table-striped</span><span class='nf'>#sortable</span><span class='p'>{</span><span class='ss'>:data</span> <span class='o'>=&gt;</span> <span class='p'>{</span><span class='n'>update_url</span><span class='p'>:</span> <span class='n'>admin_sort_thing_path</span><span class='p'>}</span>}
+</span><span class='line'><span class='nt'>%table</span><span class='nc'>.table.table-bordered.table-striped</span><span class='nf'>#sortable</span>{:data =&gt; {update_url:
+</span><span class='line'>sort_admin_things_path}}
 </span><span class='line'>  <span class='nt'>%thead</span>
 </span><span class='line'>    <span class='nt'>%tr</span>
 </span><span class='line'>      <span class='nt'>%th</span><span class='p'>=</span> <span class='no'>Title</span>
@@ -314,13 +337,13 @@
 </span><span class='line'>
 </span><span class='line'>      # make the &lt;tr&gt;&#39;s draggable by adding the expected &#39;.item&#39; class
 </span><span class='line'>      # pass the item id into params[:id]
-</span><span class='line'>      <span class='nt'>%tr</span><span class='p'>{</span><span class='n'>data</span><span class='p'>:</span> <span class='p'>{</span><span class='n'>item_id</span><span class='p'>:</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>thing</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span>&quot;}, class: &#39;item&#39;}
+</span><span class='line'>      <span class='nt'>%tr</span><span class='p'>{</span><span class='ss'>data</span><span class='p'>:</span> <span class='p'>{</span><span class='n'>item_id</span><span class='p'>:</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>thing</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span>&quot;}, class: &#39;item&#39;}
 </span><span class='line'>        <span class='nt'>%td</span><span class='p'>=</span> <span class='n'>thing</span><span class='o'>.</span><span class='n'>title</span>
 </span><span class='line'>        <span class='nt'>%td</span><span class='p'>=</span> <span class='n'>thing</span><span class='o'>.</span><span class='n'>description</span><span class='o'>.</span><span class='n'>truncate</span><span class='p'>(</span><span class='mi'>20</span><span class='p'>)</span>
 </span><span class='line'>        <span class='nt'>%td</span>
 </span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;show&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn&#39;</span>
 </span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;edit&#39;</span><span class='p'>,</span> <span class='n'>edit_admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-primary&#39;</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;destroy&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='nb'>method</span><span class='p'>:</span> <span class='ss'>:delete</span><span class='p'>,</span> <span class='n'>confirm</span><span class='p'>:</span> <span class='s2'>&quot;Are you sure?&quot;</span><span class='p'>,</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-danger&#39;</span>
+</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;destroy&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='nb'>method</span><span class='p'>:</span> <span class='ss'>:delete</span><span class='p'>,</span> <span class='ss'>confirm</span><span class='p'>:</span> <span class='s2'>&quot;Are you sure?&quot;</span><span class='p'>,</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-danger&#39;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>Finally, to indicate that the items are re-orderable I chose to change the cursor to row-resize pointer.</p>
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>assets/stylesheets/admin/application.css.scss  </span></figcaption>

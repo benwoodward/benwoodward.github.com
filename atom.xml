@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2013-01-30T19:31:51+00:00</updated>
+ <updated>2013-09-23T10:55:24+02:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -15,7 +15,7 @@
  <entry>
    <title>Tinted Tags</title>
    <link href="http://benw.me/posts/tinted-tags/"/>
-   <updated>2013-01-30T00:00:00+00:00</updated>
+   <updated>2013-01-30T00:00:00+01:00</updated>
    <id>http://jgthms.com/posts/tinted-tags</id>
    <content type="html">&lt;h3 id='overview'&gt;Overview&lt;/h3&gt;
 
@@ -335,7 +335,7 @@
  <entry>
    <title>Sortable Bootstrap Tables (in Rails)</title>
    <link href="http://benw.me/posts/sortable-bootstrap-tables/"/>
-   <updated>2012-10-01T00:00:00+01:00</updated>
+   <updated>2012-10-01T00:00:00+02:00</updated>
    <id>http://jgthms.com/posts/sortable-bootstrap-tables</id>
    <content type="html">&lt;h3 id='overview'&gt;Overview&lt;/h3&gt;
 
@@ -500,7 +500,28 @@
 &lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 &lt;p&gt;Don&amp;#8217;t forget to add a route for it!&lt;/p&gt;
-
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;config/routes.rb  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;span class='line-number'&gt;4&lt;/span&gt;
+&lt;span class='line-number'&gt;5&lt;/span&gt;
+&lt;span class='line-number'&gt;6&lt;/span&gt;
+&lt;span class='line-number'&gt;7&lt;/span&gt;
+&lt;span class='line-number'&gt;8&lt;/span&gt;
+&lt;span class='line-number'&gt;9&lt;/span&gt;
+&lt;span class='line-number'&gt;10&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='ruby'&gt;&lt;span class='line'&gt;&lt;span class='n'&gt;namespace&lt;/span&gt; &lt;span class='ss'&gt;:admin&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='n'&gt;resources&lt;/span&gt; &lt;span class='ss'&gt;:things&lt;/span&gt; &lt;span class='k'&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='c1'&gt;# The id param is passed via js, so we can use a generic route.&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='n'&gt;post&lt;/span&gt; &lt;span class='ss'&gt;:sort&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;on&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='ss'&gt;:collection&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='k'&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;# Which gives..&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='c1'&gt;# sort_admin_things  POST  /admin/things/sort(.:format)  admin/things#sort&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 &lt;p&gt;Now we can add some Javascript..&lt;/p&gt;
 &lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/application.js  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class='highlight'&gt;&lt;table&gt;&lt;tr&gt;&lt;td class='gutter'&gt;&lt;pre class='line-numbers'&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
@@ -593,8 +614,10 @@
 &lt;span class='line-number'&gt;18&lt;/span&gt;
 &lt;span class='line-number'&gt;19&lt;/span&gt;
 &lt;span class='line-number'&gt;20&lt;/span&gt;
+&lt;span class='line-number'&gt;21&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='haml'&gt;&lt;span class='line'&gt;# the update url is passed via an html5 data attribute
-&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='nt'&gt;%table&lt;/span&gt;&lt;span class='nc'&gt;.table.table-bordered.table-striped&lt;/span&gt;&lt;span class='nf'&gt;#sortable&lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='ss'&gt;:data&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;update_url&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='n'&gt;admin_sort_thing_path&lt;/span&gt;&lt;span class='p'&gt;}&lt;/span&gt;}
+&lt;/span&gt;&lt;span class='line'&gt;&lt;span class='nt'&gt;%table&lt;/span&gt;&lt;span class='nc'&gt;.table.table-bordered.table-striped&lt;/span&gt;&lt;span class='nf'&gt;#sortable&lt;/span&gt;{:data =&amp;gt; {update_url:
+&lt;/span&gt;&lt;span class='line'&gt;sort_admin_things_path}}
 &lt;/span&gt;&lt;span class='line'&gt;  &lt;span class='nt'&gt;%thead&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;    &lt;span class='nt'&gt;%tr&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%th&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='no'&gt;Title&lt;/span&gt;
@@ -606,13 +629,13 @@
 &lt;/span&gt;&lt;span class='line'&gt;
 &lt;/span&gt;&lt;span class='line'&gt;      # make the &amp;lt;tr&amp;gt;&amp;#39;s draggable by adding the expected &amp;#39;.item&amp;#39; class
 &lt;/span&gt;&lt;span class='line'&gt;      # pass the item id into params[:id]
-&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%tr&lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;data&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;item_id&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;&lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&amp;quot;}, class: &amp;#39;item&amp;#39;}
+&lt;/span&gt;&lt;span class='line'&gt;      &lt;span class='nt'&gt;%tr&lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='ss'&gt;data&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;&lt;span class='n'&gt;item_id&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;&lt;/span&gt;&lt;span class='si'&gt;#{&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;id&lt;/span&gt;&lt;span class='si'&gt;}&lt;/span&gt;&amp;quot;}, class: &amp;#39;item&amp;#39;}
 &lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;title&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;&lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;description&lt;/span&gt;&lt;span class='o'&gt;.&lt;/span&gt;&lt;span class='n'&gt;truncate&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='mi'&gt;20&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;        &lt;span class='nt'&gt;%td&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;edit&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;edit_admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-primary&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;destroy&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='nb'&gt;method&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='ss'&gt;:delete&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;confirm&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Are you sure?&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-danger&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class='line'&gt;          &lt;span class='p'&gt;=&lt;/span&gt; &lt;span class='n'&gt;link_to&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;destroy&amp;#39;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;admin_thing_path&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;thing&lt;/span&gt;&lt;span class='p'&gt;),&lt;/span&gt; &lt;span class='nb'&gt;method&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='ss'&gt;:delete&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;confirm&lt;/span&gt;&lt;span class='p'&gt;:&lt;/span&gt; &lt;span class='s2'&gt;&amp;quot;Are you sure?&amp;quot;&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='ss'&gt;:class&lt;/span&gt; &lt;span class='o'&gt;=&amp;gt;&lt;/span&gt; &lt;span class='s1'&gt;&amp;#39;btn btn-danger&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 &lt;p&gt;Finally, to indicate that the items are re-orderable I chose to change the cursor to row-resize pointer.&lt;/p&gt;
 &lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;assets/stylesheets/admin/application.css.scss  &lt;/span&gt;&lt;/figcaption&gt;
