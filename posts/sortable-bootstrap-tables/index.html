@@ -42,10 +42,10 @@
       <article data-id="postssortable-bootstrap-tables">
   <header>
   <h2>Sortable Bootstrap Tables (in Rails)</h2>
-  <time>01 Oct 2012</time>
+  <time>08 Sep 2014</time>
   </header>
   <div class="entry-content">
-    <p><strong>Update:</strong> This guide has been updated to be compatible with Rails 4
+    <p><strong>Update September 2014:</strong> This guide has been updated to be compatible with Rails 4
 and now comes with a <a href="http://sortable-bootstrap-table-rails.herokuapp.com/">demo</a> + <a href="https://github.com/benwoodward/sortable-bootstrap-tables">Github repo</a></p>
 
 <h3 id="overview">Overview</h3>
@@ -190,64 +190,13 @@ your model’s table called :row_order</p>
 
 <p>I use the official Sass port of Twitter Bootstrap — <a href="https://github.com/twbs/bootstrap-sass">https://github.com/twbs/bootstrap-sass</a></p>
 
-<h4 id="table-markup">Table Markup</h4>
-
-<p>Now you can add your bootstrap markup for a table to the index view-template, (sorry haml-haters!).</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>views/admin/things/index.html.haml  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="erb"><span class="line"><span class="x">&lt;table class=&quot;table table-bordered table-striped&quot; id=&quot;sortable&quot;&gt;</span>
-</span><span class="line"><span class="x">  &lt;thead&gt;</span>
-</span><span class="line"><span class="x">    &lt;tr&gt;</span>
-</span><span class="line"><span class="x">      &lt;th&gt;</span>
-</span><span class="line"><span class="x">        Title</span>
-</span><span class="line"><span class="x">      &lt;/th&gt;</span>
-</span><span class="line"><span class="x">      &lt;th&gt;</span>
-</span><span class="line"><span class="x">        Description</span>
-</span><span class="line"><span class="x">      &lt;/th&gt;</span>
-</span><span class="line"><span class="x">    &lt;/tr&gt;</span>
-</span><span class="line"><span class="x">  &lt;/thead&gt;</span>
-</span><span class="line"><span class="x">  &lt;tbody&gt;</span>
-</span><span class="line"><span class="x">    </span><span class="cp">&lt;%</span> <span class="vi">@things</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">thing</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">      &lt;tr data-item-id=</span><span class="cp">&lt;%=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">thing</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="cp">%&gt;</span><span class="x"> class=&quot;item&quot;&gt;</span>
-</span><span class="line"><span class="x">        &lt;td&gt;</span>
-</span><span class="line"><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">thing</span><span class="o">.</span><span class="n">title</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">        &lt;/td&gt;</span>
-</span><span class="line"><span class="x">        &lt;td&gt;</span>
-</span><span class="line"><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;show&#39;</span><span class="p">,</span> <span class="n">thing_path</span><span class="p">(</span><span class="n">thing</span><span class="p">),</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s1">&#39;btn btn-default pull-right&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">        &lt;/td&gt;</span>
-</span><span class="line"><span class="x">      &lt;/tr&gt;</span>
-</span><span class="line"><span class="x">    </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class="line"><span class="x">  &lt;/tbody&gt;</span>
-</span><span class="line"><span class="x">&lt;/table&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <h4 id="update-row-order-controller-action">Update Row Order Controller Action</h4>
 
-<p>Next you’ll need to add the #update_row_order action to your controller..</p>
+<p>The first code to write is the controller action that performs the
+reordering, updating row_order_position on an instance of Thing is all
+that is needed. The action will need the position number to move it to,
+i.e. 2nd place, and the id of the instance. We will specify these in the
+markup later and send them to this action via an AJAX POST.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>controllers/admin/things_controller.rb  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -338,6 +287,9 @@ your model’s table called :row_order</p>
 </span><span class="line"><span class="c1">//= require_tree .</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<p>Here we lift the relevant values from the rendered markup and perform
+the POST to /things/update_row_order</p>
+
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>assets/javascripts/admin/update_things_row_order.js.coffee  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -397,6 +349,64 @@ your model’s table called :row_order</p>
 </span><span class="line">          <span class="nv">data: </span><span class="p">{</span> <span class="nv">thing: </span><span class="p">{</span><span class="nv">thing_id: </span><span class="nx">item_id</span><span class="p">,</span> <span class="nv">row_order_position: </span><span class="nx">position</span> <span class="p">}</span> <span class="p">}</span>
 </span><span class="line">        <span class="p">)</span>
 </span><span class="line">    <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="table-markup">Table Markup</h4>
+
+<p>Now add your bootstrap table markup. The table rows have a class of
+.item as specified in the JQuery UI sortable options. The relevant
+thing.id is added to each row so that can be passed to the
+update_row_order controller action.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>views/admin/things/index.html.haml  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="erb"><span class="line"><span class="x">&lt;table class=&quot;table table-bordered table-striped&quot; id=&quot;sortable&quot;&gt;</span>
+</span><span class="line"><span class="x">  &lt;thead&gt;</span>
+</span><span class="line"><span class="x">    &lt;tr&gt;</span>
+</span><span class="line"><span class="x">      &lt;th&gt;</span>
+</span><span class="line"><span class="x">        Title</span>
+</span><span class="line"><span class="x">      &lt;/th&gt;</span>
+</span><span class="line"><span class="x">      &lt;th&gt;</span>
+</span><span class="line"><span class="x">        Description</span>
+</span><span class="line"><span class="x">      &lt;/th&gt;</span>
+</span><span class="line"><span class="x">    &lt;/tr&gt;</span>
+</span><span class="line"><span class="x">  &lt;/thead&gt;</span>
+</span><span class="line"><span class="x">  &lt;tbody&gt;</span>
+</span><span class="line"><span class="x">    </span><span class="cp">&lt;%</span> <span class="vi">@things</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">thing</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">      &lt;tr data-item-id=</span><span class="cp">&lt;%=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">thing</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="cp">%&gt;</span><span class="x"> class=&quot;item&quot;&gt;</span>
+</span><span class="line"><span class="x">        &lt;td&gt;</span>
+</span><span class="line"><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">thing</span><span class="o">.</span><span class="n">title</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">        &lt;/td&gt;</span>
+</span><span class="line"><span class="x">        &lt;td&gt;</span>
+</span><span class="line"><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;show&#39;</span><span class="p">,</span> <span class="n">thing_path</span><span class="p">(</span><span class="n">thing</span><span class="p">),</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s1">&#39;btn btn-default pull-right&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">        &lt;/td&gt;</span>
+</span><span class="line"><span class="x">      &lt;/tr&gt;</span>
+</span><span class="line"><span class="x">    </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">  &lt;/tbody&gt;</span>
+</span><span class="line"><span class="x">&lt;/table&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 

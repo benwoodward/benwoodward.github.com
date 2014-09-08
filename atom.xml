@@ -4,13 +4,385 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-09-08T14:23:49+10:00</updated>
+ <updated>2014-09-08T14:51:51+10:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
    <email>b@benw.me</email>
  </author>
 
+ 
+ <entry>
+   <title>Sortable Bootstrap Tables (in Rails)</title>
+   <link href="http://benw.me/posts/sortable-bootstrap-tables/"/>
+   <updated>2014-09-08T00:00:00+10:00</updated>
+   <id>http://jgthms.com/posts/sortable-bootstrap-tables</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;Update September 2014:&lt;/strong&gt; This guide has been updated to be compatible with Rails 4
+and now comes with a &lt;a href=&quot;http://sortable-bootstrap-table-rails.herokuapp.com/&quot;&gt;demo&lt;/a&gt; + &lt;a href=&quot;https://github.com/benwoodward/sortable-bootstrap-tables&quot;&gt;Github repo&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
+
+&lt;p&gt;How to add drag-and-drop reordering on a &lt;a href=&quot;http://twitter.github.com/bootstrap/&quot;&gt;twitter-bootstrap&lt;/a&gt; table in Rails. Uses &lt;a href=&quot;https://github.com/mixonic/ranked-model&quot;&gt;ranked-model&lt;/a&gt; and &lt;a href=&quot;http://jqueryui.com/&quot;&gt;jQuery-UI&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/sortable.gif&quot; alt=&quot;sortable bootstrap&quot; title=&quot;Sortable Bootstrap Table
+Gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://sortable-bootstrap-table-rails.herokuapp.com/&quot;&gt;LIVE DEMO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/benwoodward/sortable-bootstrap-tables&quot;&gt;Github repo&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;sortable-list-gems&quot;&gt;Sortable List Gems&lt;/h3&gt;
+
+&lt;p&gt;If you need to make a Rails resource type re-orderable, you have a couple of options in gem-land. &lt;a href=&quot;https://github.com/swanandp/acts_as_list&quot;&gt;acts_as_list&lt;/a&gt; is probably the most popular of these. My problem with this gem is this method..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;list.rb &lt;/span&gt;&lt;a href=&quot;https://github.com/swanandp/acts_as_list/blob/f62c43265f0e47fe7666a93849abad5aa7c5c6d3/lib/acts_as_list/active_record/acts/list.rb#L267&quot;&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This has the effect of moving all the lower items down one.&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increment_positions_on_lower_items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;n&quot;&gt;acts_as_list_class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unscoped&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position_column&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = (&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position_column&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; + 1)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scope_condition&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; AND &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position_column&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &amp;gt;= &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;To change one item’s position, all items in the list that follow it must have their position updated also. Once you have more than a few items in your database, changing their order ends up being very expensive and slow. There has to be a better way!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/mixonic/ranked-model&quot;&gt;ranked-model&lt;/a&gt; to the rescue - originally put together by &lt;a href=&quot;http://www.getharvest.com/&quot;&gt;Harvest&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And here’s ranked-model’s solution to the problem..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;ranker.rb &lt;/span&gt;&lt;a href=&quot;https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L119&quot;&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update_index_from_position&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# snip ...&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Integer&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors_at_position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:lower&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:lower&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MIN_RANK_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:upper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:upper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MAX_RANK_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;rank_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ceil&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# snip ...&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;So, ranked-model only performs an update operation on the item in
+question. It achieves this by creating a rank number that is midway
+between the two neighbors, these numbers are spread out across a very
+wide range; -8388607 to 8388607 (the extents of a signed MEDIUMINT in
+MySQL.&lt;/p&gt;
+
+&lt;p&gt;What happens if, after a few thousand re-sorts on a list there is
+actually an overlap with rank-numbers, or they end up out of range?
+Well, in that rare scenario the whole table will be updated..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;ranker.rb &lt;/span&gt;&lt;a href=&quot;https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L127&quot;&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;assure_unique_position&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_record?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rank_changed?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;rank_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MAX_RANK_VALUE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MAX_RANK_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_at_rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;rearrange_ranks&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;This is much more elegant. Realistically speaking, unless you’re dealing
+with thousands of items your web-app won’t suffer the problems that this
+gem solves. However, ranked-model is so easy to set up that I can’t see
+any good reason not to use it.&lt;/p&gt;
+
+&lt;p&gt;Install the gem, include it into your model and add an Integer column to
+your model’s table called :row_order&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Gemfile  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;ranked-model&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;models/thing.rb  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;n&quot;&gt;ranks&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:row_order&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;db/migrate/20140908010519_add_row_order_to_things.rb  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AddRowOrderToThings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Migration&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;change&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;n&quot;&gt;add_column&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:things&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:row_order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:integer&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;twitter-bootstrap&quot;&gt;Twitter Bootstrap&lt;/h3&gt;
+
+&lt;p&gt;I use the official Sass port of Twitter Bootstrap — &lt;a href=&quot;https://github.com/twbs/bootstrap-sass&quot;&gt;https://github.com/twbs/bootstrap-sass&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;update-row-order-controller-action&quot;&gt;Update Row Order Controller Action&lt;/h4&gt;
+
+&lt;p&gt;The first code to write is the controller action that performs the
+reordering, updating row_order_position on an instance of Thing is all
+that is needed. The action will need the position number to move it to,
+i.e. 2nd place, and the id of the instance. We will specify these in the
+markup later and send them to this action via an AJAX POST.&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;controllers/admin/things_controller.rb  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThingsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;c1&quot;&gt;### snip&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update_row_order&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing_params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row_order_position&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing_params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:row_order_position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# this is a POST action, updates sent via AJAX, no view rendered&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# Use callbacks to share common setup or constraints between actions.&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_thing&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# Never trust parameters from the scary internet, only allow the white list through.&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;thing_params&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:row_order_position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Add a route for the sort action&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;config/routes.rb  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:things&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:update_row_order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:collection&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Which gives..&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# update_row_order_things POST   /things/update_row_order(.:format) things#update_row_order&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can add some Javascript.. Use the &lt;a href=&quot;https://github.com/joliss/jquery-ui-rails&quot;&gt;JQuery UI Gem&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We need the sortable + highlight modules.&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/application.js  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery_ujs&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery-ui/sortable&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery-ui/effect-highlight&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require turbolinks&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require_tree .&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Here we lift the relevant values from the rendered markup and perform
+the POST to /things/update_row_order&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/update_things_row_order.js.coffee  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;25&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;26&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;27&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;28&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;29&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;coffeescript&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nx&quot;&gt;jQuery&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;-&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nv&quot;&gt;table_width = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nv&quot;&gt;cells = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;.table&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;tr&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cells&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nv&quot;&gt;desired_width = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;table_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cells&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;px&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;.table td&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;width&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;desired_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sortable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;axis: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;items: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;.item&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;cursor: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;move&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;sort: &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;(e, ui) -&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;active-item-shadow&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;stop: &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;(e, ui) -&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;active-item-shadow&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;c1&quot;&gt;# highlight the row on drop to indicate an update&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;td&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;effect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;highlight&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;update: &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;(e, ui) -&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nv&quot;&gt;item_id = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;item-id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nv&quot;&gt;position = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# this will not work with paginated items, as the index is zero on every page&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ajax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;type: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;POST&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;url: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;/things/update_row_order&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;dataType: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;json&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;data: &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;thing: &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;thing_id: &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;row_order_position: &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;position&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;table-markup&quot;&gt;Table Markup&lt;/h4&gt;
+
+&lt;p&gt;Now add your bootstrap table markup. The table rows have a class of
+.item as specified in the JQuery UI sortable options. The relevant
+thing.id is added to each row so that can be passed to the
+update_row_order controller action.&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;views/admin/things/index.html.haml  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;table class=&amp;quot;table table-bordered table-striped&amp;quot; id=&amp;quot;sortable&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;thead&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &amp;lt;tr&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        Title&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        Description&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &amp;lt;/tr&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;/thead&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;tbody&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@things&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;tr data-item-id=&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; class=&amp;quot;item&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;/td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;btn btn-default pull-right&amp;#39;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;/td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/tr&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;/tbody&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Tinted Tags</title>
@@ -378,368 +750,6 @@ tags can be passed as parameters to a search via the url.&lt;/p&gt;
 
 &lt;p&gt;For an easier way to use this code, here is a gem -
 &lt;a href=&quot;https://github.com/benwoodward/tinted_tags&quot;&gt;tinted_tags&lt;/a&gt;&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Sortable Bootstrap Tables (in Rails)</title>
-   <link href="http://benw.me/posts/sortable-bootstrap-tables/"/>
-   <updated>2012-10-01T00:00:00+10:00</updated>
-   <id>http://jgthms.com/posts/sortable-bootstrap-tables</id>
-   <content type="html">&lt;p&gt;&lt;strong&gt;Update:&lt;/strong&gt; This guide has been updated to be compatible with Rails 4
-and now comes with a &lt;a href=&quot;http://sortable-bootstrap-table-rails.herokuapp.com/&quot;&gt;demo&lt;/a&gt; + &lt;a href=&quot;https://github.com/benwoodward/sortable-bootstrap-tables&quot;&gt;Github repo&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
-
-&lt;p&gt;How to add drag-and-drop reordering on a &lt;a href=&quot;http://twitter.github.com/bootstrap/&quot;&gt;twitter-bootstrap&lt;/a&gt; table in Rails. Uses &lt;a href=&quot;https://github.com/mixonic/ranked-model&quot;&gt;ranked-model&lt;/a&gt; and &lt;a href=&quot;http://jqueryui.com/&quot;&gt;jQuery-UI&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/sortable.gif&quot; alt=&quot;sortable bootstrap&quot; title=&quot;Sortable Bootstrap Table
-Gif&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://sortable-bootstrap-table-rails.herokuapp.com/&quot;&gt;LIVE DEMO&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/benwoodward/sortable-bootstrap-tables&quot;&gt;Github repo&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;sortable-list-gems&quot;&gt;Sortable List Gems&lt;/h3&gt;
-
-&lt;p&gt;If you need to make a Rails resource type re-orderable, you have a couple of options in gem-land. &lt;a href=&quot;https://github.com/swanandp/acts_as_list&quot;&gt;acts_as_list&lt;/a&gt; is probably the most popular of these. My problem with this gem is this method..&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;list.rb &lt;/span&gt;&lt;a href=&quot;https://github.com/swanandp/acts_as_list/blob/f62c43265f0e47fe7666a93849abad5aa7c5c6d3/lib/acts_as_list/active_record/acts/list.rb#L267&quot;&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# This has the effect of moving all the lower items down one.&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increment_positions_on_lower_items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;n&quot;&gt;acts_as_list_class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unscoped&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position_column&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = (&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position_column&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; + 1)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scope_condition&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; AND &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position_column&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &amp;gt;= &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;p&gt;To change one item’s position, all items in the list that follow it must have their position updated also. Once you have more than a few items in your database, changing their order ends up being very expensive and slow. There has to be a better way!&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/mixonic/ranked-model&quot;&gt;ranked-model&lt;/a&gt; to the rescue - originally put together by &lt;a href=&quot;http://www.getharvest.com/&quot;&gt;Harvest&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;And here’s ranked-model’s solution to the problem..&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;ranker.rb &lt;/span&gt;&lt;a href=&quot;https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L119&quot;&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update_index_from_position&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# snip ...&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Integer&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors_at_position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:lower&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:lower&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MIN_RANK_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:upper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:upper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MAX_RANK_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;rank_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ceil&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# snip ...&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;p&gt;So, ranked-model only performs an update operation on the item in
-question. It achieves this by creating a rank number that is midway
-between the two neighbors, these numbers are spread out across a very
-wide range; -8388607 to 8388607 (the extents of a signed MEDIUMINT in
-MySQL.&lt;/p&gt;
-
-&lt;p&gt;What happens if, after a few thousand re-sorts on a list there is
-actually an overlap with rank-numbers, or they end up out of range?
-Well, in that rare scenario the whole table will be updated..&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;ranker.rb &lt;/span&gt;&lt;a href=&quot;https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L127&quot;&gt;link&lt;/a&gt;&lt;/figcaption&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;assure_unique_position&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_record?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rank_changed?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;rank_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MAX_RANK_VALUE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MAX_RANK_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_at_rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;rearrange_ranks&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;p&gt;This is much more elegant. Realistically speaking, unless you’re dealing
-with thousands of items your web-app won’t suffer the problems that this
-gem solves. However, ranked-model is so easy to set up that I can’t see
-any good reason not to use it.&lt;/p&gt;
-
-&lt;p&gt;Install the gem, include it into your model and add an Integer column to
-your model’s table called :row_order&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Gemfile  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;ranked-model&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;models/thing.rb  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RankedModel&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;n&quot;&gt;ranks&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:row_order&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;db/migrate/20140908010519_add_row_order_to_things.rb  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AddRowOrderToThings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Migration&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;change&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;n&quot;&gt;add_column&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:things&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:row_order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:integer&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;twitter-bootstrap&quot;&gt;Twitter Bootstrap&lt;/h3&gt;
-
-&lt;p&gt;I use the official Sass port of Twitter Bootstrap — &lt;a href=&quot;https://github.com/twbs/bootstrap-sass&quot;&gt;https://github.com/twbs/bootstrap-sass&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;table-markup&quot;&gt;Table Markup&lt;/h4&gt;
-
-&lt;p&gt;Now you can add your bootstrap markup for a table to the index view-template, (sorry haml-haters!).&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;views/admin/things/index.html.haml  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;table class=&amp;quot;table table-bordered table-striped&amp;quot; id=&amp;quot;sortable&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;thead&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &amp;lt;tr&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        Title&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        Description&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &amp;lt;/tr&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;/thead&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;tbody&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@things&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;tr data-item-id=&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; class=&amp;quot;item&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;/td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;btn btn-default pull-right&amp;#39;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;/td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/tr&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;/tbody&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;update-row-order-controller-action&quot;&gt;Update Row Order Controller Action&lt;/h4&gt;
-
-&lt;p&gt;Next you’ll need to add the #update_row_order action to your controller..&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;controllers/admin/things_controller.rb  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThingsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;c1&quot;&gt;### snip&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update_row_order&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing_params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row_order_position&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing_params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:row_order_position&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# this is a POST action, updates sent via AJAX, no view rendered&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# Use callbacks to share common setup or constraints between actions.&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_thing&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;# Never trust parameters from the scary internet, only allow the white list through.&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;thing_params&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:row_order_position&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;p&gt;Add a route for the sort action&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;config/routes.rb  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:things&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:update_row_order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:collection&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Which gives..&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# update_row_order_things POST   /things/update_row_order(.:format) things#update_row_order&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;p&gt;Now we can add some Javascript.. Use the &lt;a href=&quot;https://github.com/joliss/jquery-ui-rails&quot;&gt;JQuery UI Gem&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;We need the sortable + highlight modules.&lt;/p&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/application.js  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;javascript&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery_ujs&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery-ui/sortable&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require jquery-ui/effect-highlight&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require turbolinks&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require_tree .&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;assets/javascripts/admin/update_things_row_order.js.coffee  &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;25&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;26&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;27&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;28&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;29&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;coffeescript&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nx&quot;&gt;jQuery&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;-&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nv&quot;&gt;table_width = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nv&quot;&gt;cells = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;.table&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;tr&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cells&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nv&quot;&gt;desired_width = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;table_width&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cells&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;px&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;.table td&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;css&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;width&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;desired_width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;#sortable&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sortable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;axis: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;items: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;.item&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;cursor: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;move&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;sort: &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;(e, ui) -&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;active-item-shadow&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;stop: &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;(e, ui) -&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;active-item-shadow&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;c1&quot;&gt;# highlight the row on drop to indicate an update&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;td&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;effect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;highlight&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nv&quot;&gt;update: &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;(e, ui) -&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nv&quot;&gt;item_id = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;item-id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nv&quot;&gt;position = &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# this will not work with paginated items, as the index is zero on every page&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ajax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;type: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;POST&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;url: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;/things/update_row_order&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;dataType: &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;json&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nv&quot;&gt;data: &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;thing: &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;thing_id: &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;row_order_position: &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;position&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-
 </content>
  </entry>
  
