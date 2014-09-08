@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-09-08T14:51:51+10:00</updated>
+ <updated>2014-09-08T14:54:27+10:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -330,7 +330,7 @@ the POST to /things/update_row_order&lt;/p&gt;
 thing.id is added to each row so that can be passed to the
 update_row_order controller action.&lt;/p&gt;
 
-&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;views/admin/things/index.html.haml  &lt;/span&gt;&lt;/figcaption&gt;
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;views/admin/things/index.html.erb  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
