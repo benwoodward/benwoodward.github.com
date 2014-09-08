@@ -45,319 +45,361 @@
   <time>01 Oct 2012</time>
   </header>
   <div class="entry-content">
-    <h3 id='overview'>Overview</h3>
+    <p><strong>Update:</strong> This guide has been updated to be compatible with Rails 4
+and now comes with a <a href="http://sortable-bootstrap-table-rails.herokuapp.com/">demo</a> + <a href="https://github.com/benwoodward/sortable-bootstrap-tables">Github repo</a></p>
 
-<p>How to add drag-and-drop reordering on a <a href='http://twitter.github.com/bootstrap/'>twitter-bootstrap</a> table in Rails. Uses <a href='https://github.com/mixonic/ranked-model'>ranked-model</a> and <a href='http://jqueryui.com/'>jQuery-UI</a>.</p>
+<h3 id="overview">Overview</h3>
 
-<p><img alt='sortable bootstrap' src='/images/sortable.gif' /></p>
+<p>How to add drag-and-drop reordering on a <a href="http://twitter.github.com/bootstrap/">twitter-bootstrap</a> table in Rails. Uses <a href="https://github.com/mixonic/ranked-model">ranked-model</a> and <a href="http://jqueryui.com/">jQuery-UI</a>.</p>
 
-<h3 id='sortable_list_gems'>Sortable List Gems</h3>
+<p><img src="/images/sortable.gif" alt="sortable bootstrap" title="Sortable Bootstrap Table
+Gif" /></p>
 
-<p>If you need to make a Rails resource type re-orderable, you have a couple of options in gem-land. <a href='https://github.com/swanandp/acts_as_list'>acts_as_list</a> is probably the most popular of these. My problem with this gem is this method..</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>list.rb </span><a href='https://github.com/swanandp/acts_as_list/blob/f62c43265f0e47fe7666a93849abad5aa7c5c6d3/lib/acts_as_list/active_record/acts/list.rb#L267'>link</a></figcaption> <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class='c1'># This has the effect of moving all the lower items down one.</span>
-</span><span class='line'><span class='k'>def</span> <span class='nf'>increment_positions_on_lower_items</span><span class='p'>(</span><span class='n'>position</span><span class='p'>)</span>
-</span><span class='line'>  <span class='n'>acts_as_list_class</span><span class='o'>.</span><span class='n'>unscoped</span><span class='o'>.</span><span class='n'>update_all</span><span class='p'>(</span>
-</span><span class='line'>    <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>position_column</span><span class='si'>}</span><span class='s2'> = (</span><span class='si'>#{</span><span class='n'>position_column</span><span class='si'>}</span><span class='s2'> + 1)&quot;</span><span class='p'>,</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>scope_condition</span><span class='si'>}</span><span class='s2'> AND </span><span class='si'>#{</span><span class='n'>position_column</span><span class='si'>}</span><span class='s2'> &gt;= </span><span class='si'>#{</span><span class='n'>position</span><span class='si'>}</span><span class='s2'>&quot;</span>
-</span><span class='line'> <span class='p'>)</span>
-</span><span class='line'><span class='k'>end</span>
+<p><a href="http://sortable-bootstrap-table-rails.herokuapp.com/">LIVE DEMO</a></p>
+
+<p><a href="https://github.com/benwoodward/sortable-bootstrap-tables">Github repo</a></p>
+
+<h3 id="sortable-list-gems">Sortable List Gems</h3>
+
+<p>If you need to make a Rails resource type re-orderable, you have a couple of options in gem-land. <a href="https://github.com/swanandp/acts_as_list">acts_as_list</a> is probably the most popular of these. My problem with this gem is this method..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>list.rb </span><a href="https://github.com/swanandp/acts_as_list/blob/f62c43265f0e47fe7666a93849abad5aa7c5c6d3/lib/acts_as_list/active_record/acts/list.rb#L267">link</a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># This has the effect of moving all the lower items down one.</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">increment_positions_on_lower_items</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+</span><span class="line">  <span class="n">acts_as_list_class</span><span class="o">.</span><span class="n">unscoped</span><span class="o">.</span><span class="n">update_all</span><span class="p">(</span>
+</span><span class="line">    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">position_column</span><span class="si">}</span><span class="s2"> = (</span><span class="si">#{</span><span class="n">position_column</span><span class="si">}</span><span class="s2"> + 1)&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">scope_condition</span><span class="si">}</span><span class="s2"> AND </span><span class="si">#{</span><span class="n">position_column</span><span class="si">}</span><span class="s2"> &gt;= </span><span class="si">#{</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class="line"> <span class="p">)</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>To change one item&#8217;s position, all items in the list that follow it must have their position updated also. Once you have more than a few items in your database, changing their order ends up being very expensive and slow. There has to be a better way!</p>
 
-<p><a href='https://github.com/mixonic/ranked-model'>ranked-model</a> to the rescue - originally put together by <a href='http://www.getharvest.com/'>Harvest</a>.</p>
+<p>To change one item’s position, all items in the list that follow it must have their position updated also. Once you have more than a few items in your database, changing their order ends up being very expensive and slow. There has to be a better way!</p>
 
-<p>And here&#8217;s ranked-model&#8217;s solution to the problem..</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ranker.rb </span><a href='https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L119'>link</a></figcaption> <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class='k'>def</span> <span class='nf'>update_index_from_position</span>
-</span><span class='line'>  <span class='k'>case</span> <span class='n'>position</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='c1'># snip ...</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='k'>when</span> <span class='nb'>Integer</span>
-</span><span class='line'>      <span class='n'>neighbors</span> <span class='o'>=</span> <span class='n'>neighbors_at_position</span><span class='p'>(</span><span class='n'>position</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>min</span> <span class='o'>=</span> <span class='p'>(</span><span class='n'>neighbors</span><span class='o'>[</span><span class='ss'>:lower</span><span class='o'>]</span> <span class='p'>?</span> <span class='n'>neighbors</span><span class='o'>[</span><span class='ss'>:lower</span><span class='o'>].</span><span class='n'>rank</span> <span class='p'>:</span> <span class='no'>RankedModel</span><span class='o'>::</span><span class='no'>MIN_RANK_VALUE</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>max</span> <span class='o'>=</span> <span class='p'>(</span><span class='n'>neighbors</span><span class='o'>[</span><span class='ss'>:upper</span><span class='o'>]</span> <span class='p'>?</span> <span class='n'>neighbors</span><span class='o'>[</span><span class='ss'>:upper</span><span class='o'>].</span><span class='n'>rank</span> <span class='p'>:</span> <span class='no'>RankedModel</span><span class='o'>::</span><span class='no'>MAX_RANK_VALUE</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>rank_at</span><span class='p'>(</span> <span class='p'>(</span> <span class='p'>(</span> <span class='n'>max</span> <span class='o'>-</span> <span class='n'>min</span> <span class='p'>)</span><span class='o'>.</span><span class='n'>to_f</span> <span class='o'>/</span> <span class='mi'>2</span> <span class='p'>)</span><span class='o'>.</span><span class='n'>ceil</span> <span class='o'>+</span> <span class='n'>min</span> <span class='p'>)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='c1'># snip ...</span>
-</span><span class='line'>
-</span><span class='line'>  <span class='k'>end</span>
-</span><span class='line'><span class='k'>end</span>
+<p><a href="https://github.com/mixonic/ranked-model">ranked-model</a> to the rescue - originally put together by <a href="http://www.getharvest.com/">Harvest</a>.</p>
+
+<p>And here’s ranked-model’s solution to the problem..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>ranker.rb </span><a href="https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L119">link</a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">update_index_from_position</span>
+</span><span class="line">  <span class="k">case</span> <span class="n">position</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1"># snip ...</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">when</span> <span class="nb">Integer</span>
+</span><span class="line">      <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighbors_at_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+</span><span class="line">      <span class="n">min</span> <span class="o">=</span> <span class="p">(</span><span class="n">neighbors</span><span class="o">[</span><span class="ss">:lower</span><span class="o">]</span> <span class="p">?</span> <span class="n">neighbors</span><span class="o">[</span><span class="ss">:lower</span><span class="o">].</span><span class="n">rank</span> <span class="p">:</span> <span class="no">RankedModel</span><span class="o">::</span><span class="no">MIN_RANK_VALUE</span><span class="p">)</span>
+</span><span class="line">      <span class="n">max</span> <span class="o">=</span> <span class="p">(</span><span class="n">neighbors</span><span class="o">[</span><span class="ss">:upper</span><span class="o">]</span> <span class="p">?</span> <span class="n">neighbors</span><span class="o">[</span><span class="ss">:upper</span><span class="o">].</span><span class="n">rank</span> <span class="p">:</span> <span class="no">RankedModel</span><span class="o">::</span><span class="no">MAX_RANK_VALUE</span><span class="p">)</span>
+</span><span class="line">      <span class="n">rank_at</span><span class="p">(</span> <span class="p">(</span> <span class="p">(</span> <span class="n">max</span> <span class="o">-</span> <span class="n">min</span> <span class="p">)</span><span class="o">.</span><span class="n">to_f</span> <span class="o">/</span> <span class="mi">2</span> <span class="p">)</span><span class="o">.</span><span class="n">ceil</span> <span class="o">+</span> <span class="n">min</span> <span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1"># snip ...</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>So, ranked-model only performs an update operation on the item in question. It achieves this by creating a rank number that is midway between the two neighbors, these numbers are spread out across a very wide range; -8388607 to 8388607 (the extents of a signed MEDIUMINT in MySQL.</p>
 
-<p>What happens if, after a few thousand re-sorts on a list there is actually an overlap with rank-numbers, or they end up out of range? Well, in that rare scenario the whole table will be updated..</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ranker.rb </span><a href='https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L127'>link</a></figcaption> <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class='k'>def</span> <span class='nf'>assure_unique_position</span>
-</span><span class='line'>  <span class='k'>if</span> <span class='p'>(</span> <span class='n'>new_record?</span> <span class='o'>||</span> <span class='n'>rank_changed?</span> <span class='p'>)</span>
-</span><span class='line'>    <span class='k'>unless</span> <span class='n'>rank</span>
-</span><span class='line'>      <span class='n'>rank_at</span><span class='p'>(</span> <span class='no'>RankedModel</span><span class='o'>::</span><span class='no'>MAX_RANK_VALUE</span> <span class='p'>)</span>
-</span><span class='line'>    <span class='k'>end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='k'>if</span> <span class='p'>(</span><span class='n'>rank</span> <span class='o'>&gt;</span> <span class='no'>RankedModel</span><span class='o'>::</span><span class='no'>MAX_RANK_VALUE</span><span class='p'>)</span> <span class='o'>||</span> <span class='n'>current_at_rank</span><span class='p'>(</span><span class='n'>rank</span><span class='p'>)</span>
-</span><span class='line'>      <span class='n'>rearrange_ranks</span>
-</span><span class='line'>    <span class='k'>end</span>
-</span><span class='line'>  <span class='k'>end</span>
-</span><span class='line'><span class='k'>end</span>
+<p>So, ranked-model only performs an update operation on the item in
+question. It achieves this by creating a rank number that is midway
+between the two neighbors, these numbers are spread out across a very
+wide range; -8388607 to 8388607 (the extents of a signed MEDIUMINT in
+MySQL.</p>
+
+<p>What happens if, after a few thousand re-sorts on a list there is
+actually an overlap with rank-numbers, or they end up out of range?
+Well, in that rare scenario the whole table will be updated..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>ranker.rb </span><a href="https://github.com/mixonic/ranked-model/blob/26d35cfded07991fad5b68ee4b0318ebb81df2b4/lib/ranked-model/ranker.rb#L127">link</a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">assure_unique_position</span>
+</span><span class="line">  <span class="k">if</span> <span class="p">(</span> <span class="n">new_record?</span> <span class="o">||</span> <span class="n">rank_changed?</span> <span class="p">)</span>
+</span><span class="line">    <span class="k">unless</span> <span class="n">rank</span>
+</span><span class="line">      <span class="n">rank_at</span><span class="p">(</span> <span class="no">RankedModel</span><span class="o">::</span><span class="no">MAX_RANK_VALUE</span> <span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">if</span> <span class="p">(</span><span class="n">rank</span> <span class="o">&gt;</span> <span class="no">RankedModel</span><span class="o">::</span><span class="no">MAX_RANK_VALUE</span><span class="p">)</span> <span class="o">||</span> <span class="n">current_at_rank</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span>
+</span><span class="line">      <span class="n">rearrange_ranks</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>This is much more elegant. Realistically speaking, unless you&#8217;re dealing with thousands of items your web-app won&#8217;t suffer the problems that this gem solves. However, ranked-model is so easy to set up that I can&#8217;t see any good reason not to use it.</p>
 
-<h3 id='twitter_bootstrap'>Twitter Bootstrap</h3>
+<p>This is much more elegant. Realistically speaking, unless you’re dealing
+with thousands of items your web-app won’t suffer the problems that this
+gem solves. However, ranked-model is so easy to set up that I can’t see
+any good reason not to use it.</p>
 
-<p>There are a few ways to add bootstrap into your project, you could find a non-less version, i.e. css, and copy in the files or you could use one of the many available gems. Most of them are engines, some of them use the original less and rely on the <a href='https://github.com/metaskills/less-rails'>less-rails</a> gem to translate it. I often use <a href='http://compass-style.org'>compass</a> in Rails apps, so it would seem that the <a href='https://github.com/vwall/compass-twitter-bootstrap'>compass-twitter-bootstrap</a> gem is a good option.</p>
+<p>Install the gem, include it into your model and add an Integer column to
+your model’s table called :row_order</p>
 
-<h4 id='table_markup'>Table Markup</h4>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">gem</span> <span class="s1">&#39;ranked-model&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>models/thing.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">Thing</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class="line">  <span class="kp">include</span> <span class="no">RankedModel</span>
+</span><span class="line">  <span class="n">ranks</span> <span class="ss">:row_order</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>db/migrate/20140908010519_add_row_order_to_things.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">AddRowOrderToThings</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class="line">  <span class="k">def</span> <span class="nf">change</span>
+</span><span class="line">    <span class="n">add_column</span> <span class="ss">:things</span><span class="p">,</span> <span class="ss">:row_order</span><span class="p">,</span> <span class="ss">:integer</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="twitter-bootstrap">Twitter Bootstrap</h3>
+
+<p>I use the official Sass port of Twitter Bootstrap — <a href="https://github.com/twbs/bootstrap-sass">https://github.com/twbs/bootstrap-sass</a></p>
+
+<h4 id="table-markup">Table Markup</h4>
 
 <p>Now you can add your bootstrap markup for a table to the index view-template, (sorry haml-haters!).</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>views/admin/things/index.html.haml  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class='nt'>%table</span><span class='nc'>.table.table-bordered.table-striped</span>
-</span><span class='line'>  <span class='nt'>%thead</span>
-</span><span class='line'>    <span class='nt'>%tr</span>
-</span><span class='line'>      <span class='nt'>%th</span><span class='p'>=</span> <span class='no'>Title</span>
-</span><span class='line'>      <span class='nt'>%th</span><span class='p'>=</span> <span class='no'>Description</span>
-</span><span class='line'>      <span class='nt'>%th</span> &amp;nbsp;
-</span><span class='line'>
-</span><span class='line'>  <span class='nt'>%tbody</span>
-</span><span class='line'>    <span class='p'>-</span> <span class='vi'>@things</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>thing</span><span class='o'>|</span>
-</span><span class='line'>      <span class='nt'>%tr</span>
-</span><span class='line'>        <span class='nt'>%td</span><span class='p'>=</span> <span class='n'>thing</span><span class='o'>.</span><span class='n'>title</span>
-</span><span class='line'>        <span class='nt'>%td</span><span class='p'>=</span> <span class='n'>thing</span><span class='o'>.</span><span class='n'>description</span><span class='o'>.</span><span class='n'>truncate</span><span class='p'>(</span><span class='mi'>20</span><span class='p'>)</span>
-</span><span class='line'>        <span class='nt'>%td</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;show&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn&#39;</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;edit&#39;</span><span class='p'>,</span> <span class='n'>edit_admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-primary&#39;</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;destroy&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='nb'>method</span><span class='p'>:</span> <span class='ss'>:delete</span><span class='p'>,</span> <span class='n'>confirm</span><span class='p'>:</span> <span class='s2'>&quot;Are you sure?&quot;</span><span class='p'>,</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-danger&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<h4 id='sort_action'>Sort Action</h4>
 
-<p>Next you&#8217;ll need to add the #sort action to your controller..</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>controllers/admin/things_controller.rb  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class='k'>class</span> <span class='nc'>Admin</span><span class='o'>::</span><span class='no'>ThingsController</span> <span class='o'>&lt;</span> <span class='no'>Admin</span><span class='o'>::</span><span class='no'>ApplicationController</span>
-</span><span class='line'>
-</span><span class='line'>  <span class='k'>def</span> <span class='nf'>sort</span>
-</span><span class='line'>    <span class='vi'>@thing</span> <span class='o'>=</span> <span class='no'>Thing</span><span class='o'>.</span><span class='n'>find</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:id</span><span class='o'>]</span><span class='p'>)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='c1'># .attributes is a useful shorthand for mass-assigning</span>
-</span><span class='line'>    <span class='c1'># values via a hash</span>
-</span><span class='line'>    <span class='vi'>@thing</span><span class='o'>.</span><span class='n'>attributes</span> <span class='o'>=</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:thing</span><span class='o'>]</span>
-</span><span class='line'>    <span class='vi'>@thing</span><span class='o'>.</span><span class='n'>save</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='c1'># this action will be called via ajax</span>
-</span><span class='line'>    <span class='n'>render</span> <span class='n'>nothing</span><span class='p'>:</span> <span class='kp'>true</span>
-</span><span class='line'>  <span class='k'>end</span>
-</span><span class='line'>
-</span><span class='line'><span class='k'>end</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>views/admin/things/index.html.haml  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="erb"><span class="line"><span class="x">&lt;table class=&quot;table table-bordered table-striped&quot; id=&quot;sortable&quot;&gt;</span>
+</span><span class="line"><span class="x">  &lt;thead&gt;</span>
+</span><span class="line"><span class="x">    &lt;tr&gt;</span>
+</span><span class="line"><span class="x">      &lt;th&gt;</span>
+</span><span class="line"><span class="x">        Title</span>
+</span><span class="line"><span class="x">      &lt;/th&gt;</span>
+</span><span class="line"><span class="x">      &lt;th&gt;</span>
+</span><span class="line"><span class="x">        Description</span>
+</span><span class="line"><span class="x">      &lt;/th&gt;</span>
+</span><span class="line"><span class="x">    &lt;/tr&gt;</span>
+</span><span class="line"><span class="x">  &lt;/thead&gt;</span>
+</span><span class="line"><span class="x">  &lt;tbody&gt;</span>
+</span><span class="line"><span class="x">    </span><span class="cp">&lt;%</span> <span class="vi">@things</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">thing</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">      &lt;tr data-item-id=</span><span class="cp">&lt;%=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">thing</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="cp">%&gt;</span><span class="x"> class=&quot;item&quot;&gt;</span>
+</span><span class="line"><span class="x">        &lt;td&gt;</span>
+</span><span class="line"><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">thing</span><span class="o">.</span><span class="n">title</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">        &lt;/td&gt;</span>
+</span><span class="line"><span class="x">        &lt;td&gt;</span>
+</span><span class="line"><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s1">&#39;show&#39;</span><span class="p">,</span> <span class="n">thing_path</span><span class="p">(</span><span class="n">thing</span><span class="p">),</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s1">&#39;btn btn-default pull-right&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">        &lt;/td&gt;</span>
+</span><span class="line"><span class="x">      &lt;/tr&gt;</span>
+</span><span class="line"><span class="x">    </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class="line"><span class="x">  &lt;/tbody&gt;</span>
+</span><span class="line"><span class="x">&lt;/table&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Don&#8217;t forget to add a route for it!</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/routes.rb  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class='n'>namespace</span> <span class='ss'>:admin</span> <span class='k'>do</span>
-</span><span class='line'>  <span class='n'>resources</span> <span class='ss'>:things</span> <span class='k'>do</span>
-</span><span class='line'>    <span class='c1'># The id param is passed via js, so we can use a generic route.</span>
-</span><span class='line'>    <span class='n'>post</span> <span class='ss'>:sort</span><span class='p'>,</span> <span class='ss'>on</span><span class='p'>:</span> <span class='ss'>:collection</span>
-</span><span class='line'>  <span class='k'>end</span>
-</span><span class='line'><span class='k'>end</span>
-</span><span class='line'>
-</span><span class='line'><span class='c1'># Which gives..</span>
-</span><span class='line'>
-</span><span class='line'><span class='c1'># sort_admin_things  POST  /admin/things/sort(.:format)  admin/things#sort</span>
+
+<h4 id="update-row-order-controller-action">Update Row Order Controller Action</h4>
+
+<p>Next you’ll need to add the #update_row_order action to your controller..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>controllers/admin/things_controller.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">ThingsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class="line">
+</span><span class="line">  <span class="c1">### snip</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">update_row_order</span>
+</span><span class="line">    <span class="vi">@thing</span> <span class="o">=</span> <span class="no">Thing</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">thing_params</span><span class="o">[</span><span class="ss">:thing_id</span><span class="o">]</span><span class="p">)</span>
+</span><span class="line">    <span class="vi">@thing</span><span class="o">.</span><span class="n">row_order_position</span> <span class="o">=</span> <span class="n">thing_params</span><span class="o">[</span><span class="ss">:row_order_position</span><span class="o">]</span>
+</span><span class="line">    <span class="vi">@thing</span><span class="o">.</span><span class="n">save</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">render</span> <span class="ss">nothing</span><span class="p">:</span> <span class="kp">true</span> <span class="c1"># this is a POST action, updates sent via AJAX, no view rendered</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="kp">private</span>
+</span><span class="line">    <span class="c1"># Use callbacks to share common setup or constraints between actions.</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">set_thing</span>
+</span><span class="line">      <span class="vi">@thing</span> <span class="o">=</span> <span class="no">Thing</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1"># Never trust parameters from the scary internet, only allow the white list through.</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">thing_params</span>
+</span><span class="line">      <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:thing</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:thing_id</span><span class="p">,</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span><span class="p">,</span> <span class="ss">:row_order_position</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Now we can add some Javascript..</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>assets/javascripts/admin/application.js  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class='c1'>//= require jquery</span>
-</span><span class='line'><span class='c1'>//= require jquery_ujs</span>
-</span><span class='line'><span class='c1'>//= require jquery.ui.sortable</span>
-</span><span class='line'><span class='c1'>//= require jquery.effects.highlight</span>
-</span><span class='line'><span class='c1'>//= require ./sort</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>assets/javascripts/admin/sort.js.coffee  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class='nx'>jQuery</span> <span class='o'>-&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class='c1'># this is a small hack; when a tr is dragged with jQuery UI sortable</span>
-</span><span class='line'>  <span class='c1'># the cells lose their width</span>
-</span><span class='line'>  <span class='nv'>cells = </span><span class='nx'>$</span><span class='p'>(</span><span class='s'>&#39;.table&#39;</span><span class='p'>).</span><span class='nx'>find</span><span class='p'>(</span><span class='s'>&#39;tr&#39;</span><span class='p'>)[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>cells</span><span class='p'>.</span><span class='nx'>length</span>
-</span><span class='line'>  <span class='nv'>desired_width = </span><span class='mi'>940</span> <span class='o'>/</span> <span class='nx'>cells</span> <span class='o'>+</span> <span class='s'>&#39;px&#39;</span>
-</span><span class='line'>  <span class='nx'>$</span><span class='p'>(</span><span class='s'>&#39;.table td&#39;</span><span class='p'>).</span><span class='nx'>css</span><span class='p'>(</span><span class='s'>&#39;width&#39;</span><span class='p'>,</span> <span class='nx'>desired_width</span><span class='p'>)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class='nx'>$</span><span class='p'>(</span><span class='s'>&#39;#sortable&#39;</span><span class='p'>).</span><span class='nx'>sortable</span><span class='p'>(</span>
-</span><span class='line'>    <span class='nv'>axis: </span><span class='s'>&#39;y&#39;</span>
-</span><span class='line'>    <span class='nv'>items: </span><span class='s'>&#39;.item&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class='c1'># highlight the row on drop to indicate an update</span>
-</span><span class='line'>    <span class='nv'>stop: </span><span class='nf'>(e, ui) -&gt;</span>
-</span><span class='line'>      <span class='nx'>ui</span><span class='p'>.</span><span class='nx'>item</span><span class='p'>.</span><span class='nx'>children</span><span class='p'>(</span><span class='s'>&#39;td&#39;</span><span class='p'>).</span><span class='nx'>effect</span><span class='p'>(</span><span class='s'>&#39;highlight&#39;</span><span class='p'>,</span> <span class='p'>{},</span> <span class='mi'>1000</span><span class='p'>)</span>
-</span><span class='line'>    <span class='nv'>update: </span><span class='nf'>(e, ui) -&gt;</span>
-</span><span class='line'>      <span class='nv'>item_id = </span><span class='nx'>ui</span><span class='p'>.</span><span class='nx'>item</span><span class='p'>.</span><span class='nx'>data</span><span class='p'>(</span><span class='s'>&#39;item_id&#39;</span><span class='p'>)</span>
-</span><span class='line'>      <span class='nv'>position = </span><span class='nx'>ui</span><span class='p'>.</span><span class='nx'>item</span><span class='p'>.</span><span class='nx'>index</span><span class='p'>()</span>
-</span><span class='line'>      <span class='nx'>$</span><span class='p'>.</span><span class='nx'>ajax</span><span class='p'>(</span>
-</span><span class='line'>        <span class='nv'>type: </span><span class='s'>&#39;POST&#39;</span>
-</span><span class='line'>        <span class='nv'>url: </span><span class='nx'>$</span><span class='p'>(</span><span class='k'>this</span><span class='p'>).</span><span class='nx'>data</span><span class='p'>(</span><span class='s'>&#39;update_url&#39;</span><span class='p'>)</span>
-</span><span class='line'>        <span class='nv'>dataType: </span><span class='s'>&#39;json&#39;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class='c1'># the :thing hash gets passed to @thing.attributes</span>
-</span><span class='line'>        <span class='c1'># row_order is the default column name expected in ranked-model</span>
-</span><span class='line'>        <span class='nv'>data: </span><span class='p'>{</span> <span class='nv'>id: </span><span class='nx'>item_id</span><span class='p'>,</span> <span class='nv'>thing: </span><span class='p'>{</span> <span class='nv'>row_order_position: </span><span class='nx'>position</span> <span class='p'>}</span> <span class='p'>}</span>
-</span><span class='line'>      <span class='p'>)</span>
-</span><span class='line'>  <span class='p'>)</span>
+
+<p>Add a route for the sort action</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>config/routes.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">resources</span> <span class="ss">:things</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">post</span> <span class="ss">:update_row_order</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:collection</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># Which gives..</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># update_row_order_things POST   /things/update_row_order(.:format) things#update_row_order</span>
+</span><span class="line">
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Next we need to add into the markup the data expected by the Javascript.</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>views/admin/things/index.html.haml  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'># the update url is passed via an html5 data attribute
-</span><span class='line'><span class='nt'>%table</span><span class='nc'>.table.table-bordered.table-striped</span><span class='nf'>#sortable</span>{:data =&gt; {update_url:
-</span><span class='line'>sort_admin_things_path}}
-</span><span class='line'>  <span class='nt'>%thead</span>
-</span><span class='line'>    <span class='nt'>%tr</span>
-</span><span class='line'>      <span class='nt'>%th</span><span class='p'>=</span> <span class='no'>Title</span>
-</span><span class='line'>      <span class='nt'>%th</span><span class='p'>=</span> <span class='no'>Description</span>
-</span><span class='line'>      <span class='nt'>%th</span> &amp;nbsp;
-</span><span class='line'>
-</span><span class='line'>  <span class='nt'>%tbody</span>
-</span><span class='line'>    <span class='p'>-</span> <span class='vi'>@things</span><span class='o'>.</span><span class='n'>each</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>thing</span><span class='o'>|</span>
-</span><span class='line'>
-</span><span class='line'>      # make the &lt;tr&gt;&#39;s draggable by adding the expected &#39;.item&#39; class
-</span><span class='line'>      # pass the item id into params[:id]
-</span><span class='line'>      <span class='nt'>%tr</span><span class='p'>{</span><span class='ss'>data</span><span class='p'>:</span> <span class='p'>{</span><span class='n'>item_id</span><span class='p'>:</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>thing</span><span class='o'>.</span><span class='n'>id</span><span class='si'>}</span>&quot;}, class: &#39;item&#39;}
-</span><span class='line'>        <span class='nt'>%td</span><span class='p'>=</span> <span class='n'>thing</span><span class='o'>.</span><span class='n'>title</span>
-</span><span class='line'>        <span class='nt'>%td</span><span class='p'>=</span> <span class='n'>thing</span><span class='o'>.</span><span class='n'>description</span><span class='o'>.</span><span class='n'>truncate</span><span class='p'>(</span><span class='mi'>20</span><span class='p'>)</span>
-</span><span class='line'>        <span class='nt'>%td</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;show&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn&#39;</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;edit&#39;</span><span class='p'>,</span> <span class='n'>edit_admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-primary&#39;</span>
-</span><span class='line'>          <span class='p'>=</span> <span class='n'>link_to</span> <span class='s1'>&#39;destroy&#39;</span><span class='p'>,</span> <span class='n'>admin_thing_path</span><span class='p'>(</span><span class='n'>thing</span><span class='p'>),</span> <span class='nb'>method</span><span class='p'>:</span> <span class='ss'>:delete</span><span class='p'>,</span> <span class='ss'>confirm</span><span class='p'>:</span> <span class='s2'>&quot;Are you sure?&quot;</span><span class='p'>,</span> <span class='ss'>:class</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;btn btn-danger&#39;</span>
+
+<p>Now we can add some Javascript.. Use the <a href="https://github.com/joliss/jquery-ui-rails">JQuery UI Gem</a></p>
+
+<p>We need the sortable + highlight modules.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>assets/javascripts/admin/application.js  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">//= require jquery</span>
+</span><span class="line"><span class="c1">//= require jquery_ujs</span>
+</span><span class="line"><span class="c1">//= require jquery-ui/sortable</span>
+</span><span class="line"><span class="c1">//= require jquery-ui/effect-highlight</span>
+</span><span class="line"><span class="c1">//= require turbolinks</span>
+</span><span class="line"><span class="c1">//= require_tree .</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Finally, to indicate that the items are re-orderable I chose to change the cursor to row-resize pointer.</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>assets/stylesheets/admin/application.css.scss  </span></figcaption>
- <div class='highlight'><table><tr><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class='nn'>#sortable</span> <span class='p'>{</span>
-</span><span class='line'>  <span class='nt'>tr</span><span class='nc'>.item</span> <span class='p'>{</span>
-</span><span class='line'>    <span class='na'>cursor</span><span class='o'>:</span> <span class='n'>row-resize</span><span class='p'>;</span>
-</span><span class='line'>  <span class='p'>}</span>
-</span><span class='line'><span class='p'>}</span>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>assets/javascripts/admin/update_things_row_order.js.coffee  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="coffeescript"><span class="line"><span class="nx">jQuery</span> <span class="nf">-&gt;</span>
+</span><span class="line">  <span class="k">if</span> <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#sortable&#39;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span class="line">    <span class="nv">table_width = </span><span class="nx">$</span><span class="p">(</span><span class="s">&#39;#sortable&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>
+</span><span class="line">    <span class="nv">cells = </span><span class="nx">$</span><span class="p">(</span><span class="s">&#39;.table&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s">&#39;tr&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">cells</span><span class="p">.</span><span class="nx">length</span>
+</span><span class="line">    <span class="nv">desired_width = </span><span class="nx">table_width</span> <span class="o">/</span> <span class="nx">cells</span> <span class="o">+</span> <span class="s">&#39;px&#39;</span>
+</span><span class="line">    <span class="nx">$</span><span class="p">(</span><span class="s">&#39;.table td&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="nx">desired_width</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="nx">$</span><span class="p">(</span><span class="s">&#39;#sortable&#39;</span><span class="p">).</span><span class="nx">sortable</span><span class="p">(</span>
+</span><span class="line">      <span class="nv">axis: </span><span class="s">&#39;y&#39;</span>
+</span><span class="line">      <span class="nv">items: </span><span class="s">&#39;.item&#39;</span>
+</span><span class="line">      <span class="nv">cursor: </span><span class="s">&#39;move&#39;</span>
+</span><span class="line">
+</span><span class="line">      <span class="nv">sort: </span><span class="nf">(e, ui) -&gt;</span>
+</span><span class="line">        <span class="nx">ui</span><span class="p">.</span><span class="nx">item</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s">&#39;active-item-shadow&#39;</span><span class="p">)</span>
+</span><span class="line">      <span class="nv">stop: </span><span class="nf">(e, ui) -&gt;</span>
+</span><span class="line">        <span class="nx">ui</span><span class="p">.</span><span class="nx">item</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s">&#39;active-item-shadow&#39;</span><span class="p">)</span>
+</span><span class="line">        <span class="c1"># highlight the row on drop to indicate an update</span>
+</span><span class="line">        <span class="nx">ui</span><span class="p">.</span><span class="nx">item</span><span class="p">.</span><span class="nx">children</span><span class="p">(</span><span class="s">&#39;td&#39;</span><span class="p">).</span><span class="nx">effect</span><span class="p">(</span><span class="s">&#39;highlight&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class="line">      <span class="nv">update: </span><span class="nf">(e, ui) -&gt;</span>
+</span><span class="line">        <span class="nv">item_id = </span><span class="nx">ui</span><span class="p">.</span><span class="nx">item</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s">&#39;item-id&#39;</span><span class="p">)</span>
+</span><span class="line">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">item_id</span><span class="p">)</span>
+</span><span class="line">        <span class="nv">position = </span><span class="nx">ui</span><span class="p">.</span><span class="nx">item</span><span class="p">.</span><span class="nx">index</span><span class="p">()</span> <span class="c1"># this will not work with paginated items, as the index is zero on every page</span>
+</span><span class="line">        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span>
+</span><span class="line">          <span class="nv">type: </span><span class="s">&#39;POST&#39;</span>
+</span><span class="line">          <span class="nv">url: </span><span class="s">&#39;/things/update_row_order&#39;</span>
+</span><span class="line">          <span class="nv">dataType: </span><span class="s">&#39;json&#39;</span>
+</span><span class="line">          <span class="nv">data: </span><span class="p">{</span> <span class="nv">thing: </span><span class="p">{</span><span class="nv">thing_id: </span><span class="nx">item_id</span><span class="p">,</span> <span class="nv">row_order_position: </span><span class="nx">position</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line">        <span class="p">)</span>
+</span><span class="line">    <span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
   </div>
   
     <div id="comments-container">
@@ -381,5 +423,18 @@
 </article>
 
     </div>
+    <script type="text/javascript">
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '540cffcfeddd5b6480004105');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
   </body>
 </html>
