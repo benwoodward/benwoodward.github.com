@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-09-08T14:54:27+10:00</updated>
+ <updated>2014-09-08T14:55:19+10:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -355,30 +355,30 @@ update_row_order controller action.&lt;/p&gt;
 &lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;erb&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;table class=&amp;quot;table table-bordered table-striped&amp;quot; id=&amp;quot;sortable&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;thead&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &amp;lt;tr&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        Title&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        Description&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/th&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &amp;lt;/tr&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;/thead&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;tbody&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@things&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;tr data-item-id=&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; class=&amp;quot;item&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;/td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;show&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thing_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;btn btn-default pull-right&amp;#39;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;        &amp;lt;/td&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;      &amp;lt;/tr&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;  &amp;lt;/tbody&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;x&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;table table-bordered table-striped&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sortable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;thead&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        Title
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        Description
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/tr&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/thead&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;tbody&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% @things.each do |thing| %&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-item-id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&amp;quot;#{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;thing&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&amp;quot;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; class=&amp;quot;item&amp;quot;&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= thing.title %&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= link_to &amp;#39;show&amp;#39;, thing_path(thing), :class =&amp;gt; &amp;#39;btn btn-default pull-right&amp;#39; %&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/td&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/tr&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/tbody&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
 </content>
