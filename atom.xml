@@ -4,13 +4,423 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-10-02T11:01:01+10:00</updated>
+ <updated>2014-10-13T22:48:36+11:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
    <email>b@benw.me</email>
  </author>
 
+ 
+ <entry>
+   <title>Colourized, Pretty Printed JSON with cURL and Bash</title>
+   <link href="http://benw.me/posts/colourized-pretty-printed-json-with-curl/"/>
+   <updated>2014-10-13T00:00:00+11:00</updated>
+   <id>http://jgthms.com/posts/colourized-pretty-printed-json-with-curl</id>
+   <content type="html">&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
+
+&lt;p&gt;Working with APIs I do a lot of manual testing on the command line using cURL. Typing out &lt;code&gt;-H &quot;Accept: application/json&quot; -H &quot;Content-Type: application/json&quot;&lt;/code&gt; time after time can get tiresome. Here I will explain a simple bash function I use that will pretty print, and colourize the JSON output in your Terminal. This tutorial is written for intermediate developers using Macs, however, I’m sure all these commands will work fine on Linux machines. Let me know in the comments if you have a problem.&lt;/p&gt;
+
+&lt;h3 id=&quot;npm-jsontool&quot;&gt;npm jsontool&lt;/h3&gt;
+
+&lt;p&gt;First install jsontool from npm&lt;/p&gt;
+
+&lt;p&gt;https://www.npmjs.org/package/jsontool&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;npm install jsontool&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Now you should be able to pipe cURL output to it, like so;&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl http://localhost:3000/api/v1/exercises &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text&quot;&gt;&lt;span class=&quot;line&quot;&gt;{
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &amp;quot;exercises&amp;quot;: [
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    {
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &amp;quot;id&amp;quot;: 1,
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &amp;quot;official_name&amp;quot;: &amp;quot;Bulgarian Split&amp;quot;,
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &amp;quot;alternative_names&amp;quot;: []
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    },
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    {
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &amp;quot;id&amp;quot;: 2,
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &amp;quot;official_name&amp;quot;: &amp;quot;Lying Triceps Press&amp;quot;,
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &amp;quot;alternative_names&amp;quot;: [
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        {
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &amp;quot;id&amp;quot;: 2,
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &amp;quot;text&amp;quot;: &amp;quot;Skull Crusher&amp;quot;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        }
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      ]
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    }
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  ]
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;}
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;colourisation-yes-im-from-the-uk&quot;&gt;Colourisation (yes, I’m from the UK)&lt;/h3&gt;
+
+&lt;p&gt;You may have Python installed already, otherwise, run the following command..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;brew install python&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Followed by..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;pip install pygments&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Alternatively, you can install Pygments using Python’s built in &lt;code&gt;easy_install&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;easy_install pygments&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;You may need to reload your shell, so that $PATH is reloaded, I normally just create a new Terminal tab to do this.&lt;/p&gt;
+
+&lt;p&gt;Now we can pipe our JSON through the &lt;code&gt;pygmentize&lt;/code&gt; tool that comes with pygments. It’s normally installed to &lt;code&gt;/usr/local/bin&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;$ which pygmentize
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;/usr/local/bin/pygmentize&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Don’t forget to specify json as the lexer for pygmentize with &lt;code&gt;-l json&lt;/code&gt;…&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl http://localhost:3000/api/v1/exercises &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pygmentize -l json
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercises&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Bulgarian Split&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Lying Triceps Press&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Skull Crusher&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;a-bash-function&quot;&gt;A Bash Function&lt;/h4&gt;
+
+&lt;p&gt;Now we can wrap this up in a simple bash function (add this to your ~/.bash_profile)&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;.bash_profile  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; jcurl&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    curl &lt;span class=&quot;s2&quot;&gt;&amp;quot;$1&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pygmentize -l json
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; -f jcurl
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Reload your .bash_profile using..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;source ~/.bash_profile&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;..and now you can use it like this;&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jcurl http://localhost:3000/api/v1/exercises
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercises&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Bulgarian Split&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Lying Triceps Press&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Skull Crusher&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s modify the jcurl function a bit. If we replace the &lt;code&gt;$1&lt;/code&gt; shell variable, which takes the first argument from the command line as input, and replace it with &lt;code&gt;$@&lt;/code&gt;, then it will act like &lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;.bash_profile  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; jcurl&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    curl &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pygmentize -l json
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; -f jcurl
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;This allows us to pass more than one option to &lt;code&gt;jcurl&lt;/code&gt; ..For example, if we wanted to pass headers..&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;jcurl -H &quot;X-User-Token: a4pQnAiprk6-qczS3rn6&quot; -H &quot;X-User-Email: name@example.com&quot; http://localhost:3000/api/v1/exercises&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercises&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Bulgarian Split&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Lying Triceps Press&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Skull Crusher&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;For added convenience, I decided to do this;&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;.bash_profile  &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; jcurl&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    curl -H &lt;span class=&quot;s2&quot;&gt;&amp;quot;Accept: application/json&amp;quot;&lt;/span&gt; -H &lt;span class=&quot;s2&quot;&gt;&amp;quot;Content-Type: application/json&amp;quot;&lt;/span&gt; -H &lt;span class=&quot;s2&quot;&gt;&amp;quot;X-User-Email: $1&amp;quot;&lt;/span&gt; -H &lt;span class=&quot;s2&quot;&gt;&amp;quot;X-User-Token: $2&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;@:&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pygmentize -l json
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; -f jcurl
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;${@:3}&lt;/code&gt; is the array of command line arguments minus the first 2, (because we’ve already used them with &lt;code&gt;$1&lt;/code&gt; and &lt;code&gt;$2&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;We can now pass the username and access token to cURL and any additional options like this (notice the added &lt;code&gt;-v&lt;/code&gt;);&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;$ jcurl name@example.com a4pQnAiprk6-qczS3rn6 -v http://localhost:3000/api/v1/exercises&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Output:&lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;6&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;7&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;8&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;9&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;10&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;11&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;12&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;13&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;14&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;15&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;16&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;17&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;18&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;19&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;20&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;25&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;26&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;27&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;28&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;29&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;30&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;31&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;32&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;33&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;34&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;35&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;36&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;37&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;38&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;39&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;40&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;41&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;42&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;43&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;44&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;45&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;46&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;47&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;48&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;49&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;50&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;51&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;52&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;53&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;54&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;55&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;56&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;57&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Adding&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;handle:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;conn:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;feb&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;804600&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Adding&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;handle:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;send:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Adding&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;handle:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;recv:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Curl_addHandleToPipeline:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;length:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Conn&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;feb&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;804600&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;send_pipe:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;recv_pipe:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;About&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;connect()&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;localhost&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt;   &lt;span class=&quot;err&quot;&gt;Trying&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt;   &lt;span class=&quot;err&quot;&gt;Trying&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;127.0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Connected&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;localhost&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;127.0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;GET&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;/api/v&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;/exercises&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;HTTP/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.1&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;User-Agent:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;curl/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;7.30&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Host:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;localhost:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Accept-Encoding:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;deflate,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;gzip&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Accept:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;application/json&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Content-Type:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;application/json&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-User-Email:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;name@example.com&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-User-Token:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;pQnAiprk&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;-qczS&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;rn&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;HTTP/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;OK&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-Frame-Options:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;SAMEORIGIN&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-Xss-Protection:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;mode=block&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-Content-Type-Options:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;nosniff&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Content-Type:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;application/json;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;charset=utf&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-8&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Etag:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;fde88a8c77059ff1df34d4e7a0c2c552&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Cache-Control:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;max-age=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;private,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;must-revalidate&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-Request-Id:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;237&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ca&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;61-04&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ba&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-4367&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;-ae&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;46&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;-b&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;fba&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6975&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;47&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;X-Runtime:&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.028385&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;WEBrick/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(Ruby/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2014-05-08&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;blacklisted&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Server:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;WEBrick/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(Ruby/&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2014-05-08&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Date:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Mon,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Oct&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2014&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;19&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;02&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;GMT&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Content-Length:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;278&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Connection:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Keep-Alive&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;[data&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;shown]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Connection&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;#0&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;host&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;localhost&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;intact&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercises&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Bulgarian Split&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;official_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Lying Triceps Press&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;nt&quot;&gt;&amp;quot;alternative_names&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Skull Crusher&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercise_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;created_at&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2014-10-13T10:21:22.483Z&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;updated_at&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2014-10-13T10:21:22.483Z&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;Let me know in the comments below if you found this helpful, or can suggest any improvements.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Sortable Bootstrap Tables (in Rails)</title>

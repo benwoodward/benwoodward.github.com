@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A quick way to setup colourized and pretty printed JSON cURL output. Useful when you need to manually test your JSON API.">
+		<title>Colourized, Pretty Printed JSON with cURL and Bash</title>
+    <meta name="author" content="Ben Woodward">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0;">
+    <meta name="msapplication-tooltip" content="Ben Woodward's blog on Ruby, Rails and other things.">
+		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="Ruby on Rails Developer">
+	</head>
+  <body>
+    <header class="banner navbar navbar-static-top">
+      <div class="navbar-inner">
+        <a class="brand" href="http://benw.me"></a>
+        <h3>Ben Woodward</h3>
+          <p class="social">
+            <a href="http://twitter.com/benwdwd" class="ss-icon ss-social-circle ss-twitter"></a>
+            <a href="https://github.com/benwoodward" class="ss-icon ss-social-circle ss-octocat"></a>
+            <a href="/atom.xml" class="ss-icon ss-social-circle ss-rss"></a>
+          </p>
+          <p>
+            <script type="text/javascript">
+              //<![CDATA[
+              <!--
+              var x="function f(x){var i,o=\"\",ol=x.length,l=ol;while(x.charCodeAt(l/13)!" +
+              "=55){try{x+=x;l+=l;}catch(e){}}for(i=l-1;i>=0;i--){o+=x.charAt(i);}return o" +
+              ".substr(0,ol);}f(\")701,\\\"t~veit(g{#(j4,$\\\"\\\\771\\\\\\\\\\\\300\\\\63" +
+              "0\\\\g_t030\\\\CUT@]]r220\\\\s320\\\\H@_C]010\\\\500\\\\zJHOGi530\\\\k}xvyo" +
+              "j'r{;c}wsPm4bxgche%Z8bfpi 730\\\\A^S420\\\\520\\\\530\\\\300\\\\730\\\\700\\"+
+              "\\300\\\\]600\\\\730\\\\520\\\\200\\\\330\\\\610\\\\300\\\\710\\\\\\\"(f};o" +
+              " nruter};))++y(^)i(tAedoCrahc.x(edoCrahCmorf.gnirtS=+o;721=%y;i=+y)701==i(f" +
+              "i{)++i;l<i;0=i(rof;htgnel.x=l,\\\"\\\"=o,i rav{)y,x(f noitcnuf\")"           ;
+              while(x=eval(x));
+              //-->
+              //]]>
+            </script>
+          </p>
+      </div>
+    </header>
+    <div id="wrap">
+      <article data-id="postscolourized-pretty-printed-json-with-curl">
+  <header>
+  <h2>Colourized, Pretty Printed JSON with cURL and Bash</h2>
+  <time>13 Oct 2014</time>
+  </header>
+  <div class="entry-content">
+    <h3 id="overview">Overview</h3>
+
+<p>Working with APIs I do a lot of manual testing on the command line using cURL. Typing out <code>-H "Accept: application/json" -H "Content-Type: application/json"</code> time after time can get tiresome. Here I will explain a simple bash function I use that will pretty print, and colourize the JSON output in your Terminal. This tutorial is written for intermediate developers using Macs, however, I’m sure all these commands will work fine on Linux machines. Let me know in the comments if you have a problem.</p>
+
+<h3 id="npm-jsontool">npm jsontool</h3>
+
+<p>First install jsontool from npm</p>
+
+<p>https://www.npmjs.org/package/jsontool</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">npm install jsontool</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now you should be able to pipe cURL output to it, like so;</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>curl http://localhost:3000/api/v1/exercises <span class="p">|</span> json
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Output:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">{
+</span><span class="line">  &quot;exercises&quot;: [
+</span><span class="line">    {
+</span><span class="line">      &quot;id&quot;: 1,
+</span><span class="line">      &quot;official_name&quot;: &quot;Bulgarian Split&quot;,
+</span><span class="line">      &quot;alternative_names&quot;: []
+</span><span class="line">    },
+</span><span class="line">    {
+</span><span class="line">      &quot;id&quot;: 2,
+</span><span class="line">      &quot;official_name&quot;: &quot;Lying Triceps Press&quot;,
+</span><span class="line">      &quot;alternative_names&quot;: [
+</span><span class="line">        {
+</span><span class="line">          &quot;id&quot;: 2,
+</span><span class="line">          &quot;text&quot;: &quot;Skull Crusher&quot;
+</span><span class="line">        }
+</span><span class="line">      ]
+</span><span class="line">    }
+</span><span class="line">  ]
+</span><span class="line">}
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="colourisation-yes-im-from-the-uk">Colourisation (yes, I’m from the UK)</h3>
+
+<p>You may have Python installed already, otherwise, run the following command..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">brew install python</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Followed by..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">pip install pygments</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Alternatively, you can install Pygments using Python’s built in <code>easy_install</code></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">easy_install pygments</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>You may need to reload your shell, so that $PATH is reloaded, I normally just create a new Terminal tab to do this.</p>
+
+<p>Now we can pipe our JSON through the <code>pygmentize</code> tool that comes with pygments. It’s normally installed to <code>/usr/local/bin</code>:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ which pygmentize
+</span><span class="line">/usr/local/bin/pygmentize</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Don’t forget to specify json as the lexer for pygmentize with <code>-l json</code>…</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>curl http://localhost:3000/api/v1/exercises <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Output:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
+</span><span class="line">    <span class="p">},</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">        <span class="p">{</span>
+</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
+</span><span class="line">        <span class="p">}</span>
+</span><span class="line">      <span class="p">]</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="a-bash-function">A Bash Function</h4>
+
+<p>Now we can wrap this up in a simple bash function (add this to your ~/.bash_profile)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>.bash_profile  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">function</span> jcurl<span class="o">()</span> <span class="o">{</span>
+</span><span class="line">    curl <span class="s2">&quot;$1&quot;</span> <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="nb">export</span> -f jcurl
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Reload your .bash_profile using..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">source ~/.bash_profile</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>..and now you can use it like this;</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>jcurl http://localhost:3000/api/v1/exercises
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Output:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
+</span><span class="line">    <span class="p">},</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">        <span class="p">{</span>
+</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
+</span><span class="line">        <span class="p">}</span>
+</span><span class="line">      <span class="p">]</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Let’s modify the jcurl function a bit. If we replace the <code>$1</code> shell variable, which takes the first argument from the command line as input, and replace it with <code>$@</code>, then it will act like </p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>.bash_profile  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">function</span> jcurl<span class="o">()</span> <span class="o">{</span>
+</span><span class="line">    curl <span class="s2">&quot;$@&quot;</span> <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="nb">export</span> -f jcurl
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This allows us to pass more than one option to <code>jcurl</code> ..For example, if we wanted to pass headers..</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">jcurl -H "X-User-Token: a4pQnAiprk6-qczS3rn6" -H "X-User-Email: name@example.com" http://localhost:3000/api/v1/exercises</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Output:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
+</span><span class="line">    <span class="p">},</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">        <span class="p">{</span>
+</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
+</span><span class="line">        <span class="p">}</span>
+</span><span class="line">      <span class="p">]</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>For added convenience, I decided to do this;</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>.bash_profile  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">function</span> jcurl<span class="o">()</span> <span class="o">{</span>
+</span><span class="line">    curl -H <span class="s2">&quot;Accept: application/json&quot;</span> -H <span class="s2">&quot;Content-Type: application/json&quot;</span> -H <span class="s2">&quot;X-User-Email: $1&quot;</span> -H <span class="s2">&quot;X-User-Token: $2&quot;</span> <span class="k">${</span><span class="p">@:</span><span class="nv">3</span><span class="k">}</span> <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="nb">export</span> -f jcurl
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><code>${@:3}</code> is the array of command line arguments minus the first 2, (because we’ve already used them with <code>$1</code> and <code>$2</code>).</p>
+
+<p>We can now pass the username and access token to cURL and any additional options like this (notice the added <code>-v</code>);</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ jcurl name@example.com a4pQnAiprk6-qczS3rn6 -v http://localhost:3000/api/v1/exercises</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Output:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">*</span> <span class="err">Adding</span> <span class="err">handle:</span> <span class="err">conn:</span> <span class="mi">0</span><span class="err">x</span><span class="mi">7</span><span class="err">feb</span><span class="mi">7</span><span class="err">b</span><span class="mi">804600</span>
+</span><span class="line"><span class="err">*</span> <span class="err">Adding</span> <span class="err">handle:</span> <span class="err">send:</span> <span class="mi">0</span>
+</span><span class="line"><span class="err">*</span> <span class="err">Adding</span> <span class="err">handle:</span> <span class="err">recv:</span> <span class="mi">0</span>
+</span><span class="line"><span class="err">*</span> <span class="err">Curl_addHandleToPipeline:</span> <span class="err">length:</span> <span class="mi">1</span>
+</span><span class="line"><span class="err">*</span> <span class="err">-</span> <span class="err">Conn</span> <span class="mi">0</span> <span class="err">(</span><span class="mi">0</span><span class="err">x</span><span class="mi">7</span><span class="err">feb</span><span class="mi">7</span><span class="err">b</span><span class="mi">804600</span><span class="err">)</span> <span class="err">send_pipe:</span> <span class="mi">1</span><span class="err">,</span> <span class="err">recv_pipe:</span> <span class="mi">0</span>
+</span><span class="line"><span class="err">*</span> <span class="err">About</span> <span class="err">to</span> <span class="err">connect()</span> <span class="err">to</span> <span class="err">localhost</span> <span class="err">port</span> <span class="mi">3000</span> <span class="err">(#</span><span class="mi">0</span><span class="err">)</span>
+</span><span class="line"><span class="err">*</span>   <span class="err">Trying</span> <span class="err">::</span><span class="mi">1</span><span class="err">...</span>
+</span><span class="line"><span class="err">*</span>   <span class="err">Trying</span> <span class="mf">127.0</span><span class="err">.</span><span class="mf">0.1</span><span class="err">...</span>
+</span><span class="line"><span class="err">*</span> <span class="err">Connected</span> <span class="err">to</span> <span class="err">localhost</span> <span class="err">(</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">0.1</span><span class="err">)</span> <span class="err">port</span> <span class="mi">3000</span> <span class="err">(#</span><span class="mi">0</span><span class="err">)</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">GET</span> <span class="err">/api/v</span><span class="mi">1</span><span class="err">/exercises</span> <span class="err">HTTP/</span><span class="mf">1.1</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">User-Agent:</span> <span class="err">curl/</span><span class="mf">7.30</span><span class="err">.</span><span class="mi">0</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">Host:</span> <span class="err">localhost:</span><span class="mi">3000</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">Accept-Encoding:</span> <span class="err">deflate,</span> <span class="err">gzip</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">Accept:</span> <span class="err">application/json</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">Content-Type:</span> <span class="err">application/json</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">X-User-Email:</span> <span class="err">name@example.com</span>
+</span><span class="line"><span class="err">&gt;</span> <span class="err">X-User-Token:</span> <span class="err">a</span><span class="mi">4</span><span class="err">pQnAiprk</span><span class="mi">6</span><span class="err">-qczS</span><span class="mi">3</span><span class="err">rn</span><span class="mi">6</span>
+</span><span class="line"><span class="err">&gt;</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">HTTP/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="err">OK</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Frame-Options:</span> <span class="err">SAMEORIGIN</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Xss-Protection:</span> <span class="mi">1</span><span class="err">;</span> <span class="err">mode=block</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Content-Type-Options:</span> <span class="err">nosniff</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Content-Type:</span> <span class="err">application/json;</span> <span class="err">charset=utf</span><span class="mi">-8</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Etag:</span> <span class="s2">&quot;fde88a8c77059ff1df34d4e7a0c2c552&quot;</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Cache-Control:</span> <span class="err">max-age=</span><span class="mi">0</span><span class="err">,</span> <span class="err">private,</span> <span class="err">must-revalidate</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Request-Id:</span> <span class="err">c</span><span class="mi">237</span><span class="err">ca</span><span class="mi">61-04</span><span class="err">ba</span><span class="mi">-4367</span><span class="err">-ae</span><span class="mi">46</span><span class="err">-b</span><span class="mi">3</span><span class="err">fba</span><span class="mi">6975</span><span class="err">d</span><span class="mi">47</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Runtime:</span> <span class="mf">0.028385</span>
+</span><span class="line"><span class="err">*</span> <span class="err">Server</span> <span class="err">WEBrick/</span><span class="mf">1.3</span><span class="err">.</span><span class="mi">1</span> <span class="err">(Ruby/</span><span class="mf">2.1</span><span class="err">.</span><span class="mi">2</span><span class="err">/</span><span class="mi">2014-05-08</span><span class="err">)</span> <span class="err">is</span> <span class="err">not</span> <span class="err">blacklisted</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Server:</span> <span class="err">WEBrick/</span><span class="mf">1.3</span><span class="err">.</span><span class="mi">1</span> <span class="err">(Ruby/</span><span class="mf">2.1</span><span class="err">.</span><span class="mi">2</span><span class="err">/</span><span class="mi">2014-05-08</span><span class="err">)</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Date:</span> <span class="err">Mon,</span> <span class="mi">13</span> <span class="err">Oct</span> <span class="mi">2014</span> <span class="mi">11</span><span class="err">:</span><span class="mi">19</span><span class="err">:</span><span class="mi">02</span> <span class="err">GMT</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Content-Length:</span> <span class="mi">278</span>
+</span><span class="line"><span class="err">&lt;</span> <span class="err">Connection:</span> <span class="err">Keep-Alive</span>
+</span><span class="line"><span class="err">&lt;</span>
+</span><span class="line"><span class="p">{</span> <span class="err">[data</span> <span class="err">not</span> <span class="err">shown]</span>
+</span><span class="line"><span class="err">*</span> <span class="err">Connection</span> <span class="err">#0</span> <span class="err">to</span> <span class="err">host</span> <span class="err">localhost</span> <span class="err">left</span> <span class="err">intact</span>
+</span><span class="line"><span class="err">{</span>
+</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
+</span><span class="line">    <span class="p">},</span>
+</span><span class="line">    <span class="p">{</span>
+</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">        <span class="p">{</span>
+</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;exercise_id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2014-10-13T10:21:22.483Z&quot;</span><span class="p">,</span>
+</span><span class="line">          <span class="nt">&quot;updated_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2014-10-13T10:21:22.483Z&quot;</span>
+</span><span class="line">        <span class="p">}</span>
+</span><span class="line">      <span class="p">]</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Let me know in the comments below if you found this helpful, or can suggest any improvements.</p>
+
+  </div>
+  
+    <div id="comments-container">
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite">
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      <script type="text/javascript">
+        var disqus_shortname = 'benwme';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://benw.me/posts/colourized-pretty-printed-json-with-curl/';
+        var disqus_url = 'http://benw.me/posts/colourized-pretty-printed-json-with-curl/';
+        (function () {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+      </script>
+    </div>
+  
+</article>
+
+    </div>
+    <script type="text/javascript">
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '540cffcfeddd5b6480004105');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
+  </body>
+</html>
