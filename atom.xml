@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-10-13T22:58:25+11:00</updated>
+ <updated>2014-10-13T23:03:57+11:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -362,8 +362,6 @@
 &lt;span class=&quot;line-number&quot;&gt;53&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;54&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;55&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;56&lt;/span&gt;
-&lt;span class=&quot;line-number&quot;&gt;57&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Adding&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;handle:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;conn:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;feb&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;804600&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Adding&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;handle:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;send:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;err&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;Adding&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;handle:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;recv:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
@@ -413,9 +411,7 @@
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Skull Crusher&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercise_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;created_at&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2014-10-13T10:21:22.483Z&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;updated_at&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2014-10-13T10:21:22.483Z&amp;quot;&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;nt&quot;&gt;&amp;quot;exercise_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
