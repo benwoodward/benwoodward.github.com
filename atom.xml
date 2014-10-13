@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-10-13T22:48:36+11:00</updated>
+ <updated>2014-10-13T22:56:14+11:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -19,7 +19,12 @@
    <id>http://jgthms.com/posts/colourized-pretty-printed-json-with-curl</id>
    <content type="html">&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
 
-&lt;p&gt;Working with APIs I do a lot of manual testing on the command line using cURL. Typing out &lt;code&gt;-H &quot;Accept: application/json&quot; -H &quot;Content-Type: application/json&quot;&lt;/code&gt; time after time can get tiresome. Here I will explain a simple bash function I use that will pretty print, and colourize the JSON output in your Terminal. This tutorial is written for intermediate developers using Macs, however, I’m sure all these commands will work fine on Linux machines. Let me know in the comments if you have a problem.&lt;/p&gt;
+&lt;p&gt;Working with APIs I do a lot of manual testing on the command line using cURL. Typing out &lt;/p&gt;
+
+&lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;curl -H &quot;Accept: application/json&quot; -H &quot;Content-Type: application/json&quot; -H &quot;X-User-Email: name@example.com&quot; -H &quot;X-User-Token: a4pQnAiprk6-qczS3rn6&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+
+&lt;p&gt;over and over quickly becomes tiresome. Here I will explain a simple bash function I use that will simplify the command plus pretty print, and colourise the JSON output in your Terminal. This tutorial is written for intermediate developers using Macs, however, I’m sure all these commands will work fine on Linux machines. Let me know in the comments if you have a problem.&lt;/p&gt;
 
 &lt;h3 id=&quot;npm-jsontool&quot;&gt;npm jsontool&lt;/h3&gt;
 
@@ -78,7 +83,7 @@
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;}
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;colourisation-yes-im-from-the-uk&quot;&gt;Colourisation (yes, I’m from the UK)&lt;/h3&gt;
+&lt;h3 id=&quot;colourisation&quot;&gt;Colourisation&lt;/h3&gt;
 
 &lt;p&gt;You may have Python installed already, otherwise, run the following command..&lt;/p&gt;
 
