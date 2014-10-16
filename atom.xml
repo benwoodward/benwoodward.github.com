@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-10-16T21:38:15+11:00</updated>
+ <updated>2014-10-16T21:52:07+11:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -41,7 +41,7 @@
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl http://localhost:3000/api/v1/exercises &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/pretty_print_json/00_no_highlighting.png&quot; alt=&quot;cURL output&quot; title=&quot;cURL output&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/pretty_print_json/highlighting.png&quot; alt=&quot;cURL output&quot; title=&quot;cURL output&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;colourisation&quot;&gt;Colourisation&lt;/h3&gt;
 
@@ -75,7 +75,7 @@
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl http://localhost:3000/api/v1/exercises &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pygmentize -l json
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/pretty_print_json/01_highlighted.png&quot; alt=&quot;cURL output&quot; title=&quot;cURL output&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/pretty_print_json/highlighted.png&quot; alt=&quot;cURL output&quot; title=&quot;cURL output&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;a-bash-function&quot;&gt;A Bash Function&lt;/h4&gt;
 
