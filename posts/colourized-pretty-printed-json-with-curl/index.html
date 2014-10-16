@@ -71,47 +71,7 @@
 </pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>curl http://localhost:3000/api/v1/exercises <span class="p">|</span> json
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Output:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="text"><span class="line">{
-</span><span class="line">  &quot;exercises&quot;: [
-</span><span class="line">    {
-</span><span class="line">      &quot;id&quot;: 1,
-</span><span class="line">      &quot;official_name&quot;: &quot;Bulgarian Split&quot;,
-</span><span class="line">      &quot;alternative_names&quot;: []
-</span><span class="line">    },
-</span><span class="line">    {
-</span><span class="line">      &quot;id&quot;: 2,
-</span><span class="line">      &quot;official_name&quot;: &quot;Lying Triceps Press&quot;,
-</span><span class="line">      &quot;alternative_names&quot;: [
-</span><span class="line">        {
-</span><span class="line">          &quot;id&quot;: 2,
-</span><span class="line">          &quot;text&quot;: &quot;Skull Crusher&quot;
-</span><span class="line">        }
-</span><span class="line">      ]
-</span><span class="line">    }
-</span><span class="line">  ]
-</span><span class="line">}
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><img src="/images/pretty_print_json/00_no_highlighting.png" alt="cURL output" title="cURL output" /></p>
 
 <h3 id="colourisation">Colourisation</h3>
 
@@ -145,47 +105,7 @@
 </pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>curl http://localhost:3000/api/v1/exercises <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Output:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
-</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
-</span><span class="line">    <span class="p">},</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">        <span class="p">{</span>
-</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
-</span><span class="line">        <span class="p">}</span>
-</span><span class="line">      <span class="p">]</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">  <span class="p">]</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><img src="/images/pretty_print_json/01_highlighted.png" alt="cURL output" title="cURL output" /></p>
 
 <h4 id="a-bash-function">A Bash Function</h4>
 
@@ -207,52 +127,10 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">source ~/.bash_profile</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>..and now you can use it like this;</p>
+<p>Now we can get the same result as before, just using the command like so..</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>jcurl http://localhost:3000/api/v1/exercises
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Output:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
-</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
-</span><span class="line">    <span class="p">},</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">        <span class="p">{</span>
-</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
-</span><span class="line">        <span class="p">}</span>
-</span><span class="line">      <span class="p">]</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">  <span class="p">]</span>
-</span><span class="line"><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>Let’s modify the jcurl function a bit. If we replace the <code>$1</code> shell variable, which takes the first argument from the command line as input, and replace it with <code>$@</code>, then it will act like </p>
@@ -273,48 +151,6 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">jcurl -H "X-User-Token: a4pQnAiprk6-qczS3rn6" -H "X-User-Email: name@example.com" http://localhost:3000/api/v1/exercises</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Output:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
-</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
-</span><span class="line">    <span class="p">},</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">        <span class="p">{</span>
-</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
-</span><span class="line">        <span class="p">}</span>
-</span><span class="line">      <span class="p">]</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">  <span class="p">]</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 <p>For added convenience, I decided to do this;</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>.bash_profile  </span></figcaption>
@@ -322,130 +158,18 @@
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">function</span> jcurl<span class="o">()</span> <span class="o">{</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="k">function</span> auth-jcurl<span class="o">()</span> <span class="o">{</span>
 </span><span class="line">    curl -H <span class="s2">&quot;Accept: application/json&quot;</span> -H <span class="s2">&quot;Content-Type: application/json&quot;</span> -H <span class="s2">&quot;X-User-Email: $1&quot;</span> -H <span class="s2">&quot;X-User-Token: $2&quot;</span> <span class="k">${</span><span class="p">@:</span><span class="nv">3</span><span class="k">}</span> <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
 </span><span class="line"><span class="o">}</span>
-</span><span class="line"><span class="nb">export</span> -f jcurl
+</span><span class="line"><span class="nb">export</span> -f auth-jcurl
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><code>${@:3}</code> is the array of command line arguments minus the first 2, (because we’ve already used them with <code>$1</code> and <code>$2</code>).</p>
 
-<p>We can now pass the username and access token to cURL and any additional options like this (notice the added <code>-v</code>);</p>
+<p>We can now pass the username and access token to cURL and any additional options (which will be picked up by “$@”)</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">$ jcurl name@example.com a4pQnAiprk6-qczS3rn6 -v http://localhost:3000/api/v1/exercises</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Output:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-<span class="line-number">53</span>
-<span class="line-number">54</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">*</span> <span class="err">Adding</span> <span class="err">handle:</span> <span class="err">conn:</span> <span class="mi">0</span><span class="err">x</span><span class="mi">7</span><span class="err">feb</span><span class="mi">7</span><span class="err">b</span><span class="mi">804600</span>
-</span><span class="line"><span class="err">*</span> <span class="err">Adding</span> <span class="err">handle:</span> <span class="err">send:</span> <span class="mi">0</span>
-</span><span class="line"><span class="err">*</span> <span class="err">Adding</span> <span class="err">handle:</span> <span class="err">recv:</span> <span class="mi">0</span>
-</span><span class="line"><span class="err">*</span> <span class="err">Curl_addHandleToPipeline:</span> <span class="err">length:</span> <span class="mi">1</span>
-</span><span class="line"><span class="err">*</span> <span class="err">-</span> <span class="err">Conn</span> <span class="mi">0</span> <span class="err">(</span><span class="mi">0</span><span class="err">x</span><span class="mi">7</span><span class="err">feb</span><span class="mi">7</span><span class="err">b</span><span class="mi">804600</span><span class="err">)</span> <span class="err">send_pipe:</span> <span class="mi">1</span><span class="err">,</span> <span class="err">recv_pipe:</span> <span class="mi">0</span>
-</span><span class="line"><span class="err">*</span> <span class="err">About</span> <span class="err">to</span> <span class="err">connect()</span> <span class="err">to</span> <span class="err">localhost</span> <span class="err">port</span> <span class="mi">3000</span> <span class="err">(#</span><span class="mi">0</span><span class="err">)</span>
-</span><span class="line"><span class="err">*</span>   <span class="err">Trying</span> <span class="err">::</span><span class="mi">1</span><span class="err">...</span>
-</span><span class="line"><span class="err">*</span>   <span class="err">Trying</span> <span class="mf">127.0</span><span class="err">.</span><span class="mf">0.1</span><span class="err">...</span>
-</span><span class="line"><span class="err">*</span> <span class="err">Connected</span> <span class="err">to</span> <span class="err">localhost</span> <span class="err">(</span><span class="mf">127.0</span><span class="err">.</span><span class="mf">0.1</span><span class="err">)</span> <span class="err">port</span> <span class="mi">3000</span> <span class="err">(#</span><span class="mi">0</span><span class="err">)</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">GET</span> <span class="err">/api/v</span><span class="mi">1</span><span class="err">/exercises</span> <span class="err">HTTP/</span><span class="mf">1.1</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">User-Agent:</span> <span class="err">curl/</span><span class="mf">7.30</span><span class="err">.</span><span class="mi">0</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">Host:</span> <span class="err">localhost:</span><span class="mi">3000</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">Accept-Encoding:</span> <span class="err">deflate,</span> <span class="err">gzip</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">Accept:</span> <span class="err">application/json</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">Content-Type:</span> <span class="err">application/json</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">X-User-Email:</span> <span class="err">name@example.com</span>
-</span><span class="line"><span class="err">&gt;</span> <span class="err">X-User-Token:</span> <span class="err">a</span><span class="mi">4</span><span class="err">pQnAiprk</span><span class="mi">6</span><span class="err">-qczS</span><span class="mi">3</span><span class="err">rn</span><span class="mi">6</span>
-</span><span class="line"><span class="err">&gt;</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">HTTP/</span><span class="mf">1.1</span> <span class="mi">200</span> <span class="err">OK</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Frame-Options:</span> <span class="err">SAMEORIGIN</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Xss-Protection:</span> <span class="mi">1</span><span class="err">;</span> <span class="err">mode=block</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Content-Type-Options:</span> <span class="err">nosniff</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Content-Type:</span> <span class="err">application/json;</span> <span class="err">charset=utf</span><span class="mi">-8</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Etag:</span> <span class="s2">&quot;fde88a8c77059ff1df34d4e7a0c2c552&quot;</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Cache-Control:</span> <span class="err">max-age=</span><span class="mi">0</span><span class="err">,</span> <span class="err">private,</span> <span class="err">must-revalidate</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Request-Id:</span> <span class="err">c</span><span class="mi">237</span><span class="err">ca</span><span class="mi">61-04</span><span class="err">ba</span><span class="mi">-4367</span><span class="err">-ae</span><span class="mi">46</span><span class="err">-b</span><span class="mi">3</span><span class="err">fba</span><span class="mi">6975</span><span class="err">d</span><span class="mi">47</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">X-Runtime:</span> <span class="mf">0.028385</span>
-</span><span class="line"><span class="err">*</span> <span class="err">Server</span> <span class="err">WEBrick/</span><span class="mf">1.3</span><span class="err">.</span><span class="mi">1</span> <span class="err">(Ruby/</span><span class="mf">2.1</span><span class="err">.</span><span class="mi">2</span><span class="err">/</span><span class="mi">2014-05-08</span><span class="err">)</span> <span class="err">is</span> <span class="err">not</span> <span class="err">blacklisted</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Server:</span> <span class="err">WEBrick/</span><span class="mf">1.3</span><span class="err">.</span><span class="mi">1</span> <span class="err">(Ruby/</span><span class="mf">2.1</span><span class="err">.</span><span class="mi">2</span><span class="err">/</span><span class="mi">2014-05-08</span><span class="err">)</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Date:</span> <span class="err">Mon,</span> <span class="mi">13</span> <span class="err">Oct</span> <span class="mi">2014</span> <span class="mi">11</span><span class="err">:</span><span class="mi">19</span><span class="err">:</span><span class="mi">02</span> <span class="err">GMT</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Content-Length:</span> <span class="mi">278</span>
-</span><span class="line"><span class="err">&lt;</span> <span class="err">Connection:</span> <span class="err">Keep-Alive</span>
-</span><span class="line"><span class="err">&lt;</span>
-</span><span class="line"><span class="p">{</span> <span class="err">[data</span> <span class="err">not</span> <span class="err">shown]</span>
-</span><span class="line"><span class="err">*</span> <span class="err">Connection</span> <span class="err">#0</span> <span class="err">to</span> <span class="err">host</span> <span class="err">localhost</span> <span class="err">left</span> <span class="err">intact</span>
-</span><span class="line"><span class="err">{</span>
-</span><span class="line">  <span class="nt">&quot;exercises&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Bulgarian Split&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[]</span>
-</span><span class="line">    <span class="p">},</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;official_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lying Triceps Press&quot;</span><span class="p">,</span>
-</span><span class="line">      <span class="nt">&quot;alternative_names&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class="line">        <span class="p">{</span>
-</span><span class="line">          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class="line">          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Skull Crusher&quot;</span>
-</span><span class="line">        <span class="p">}</span>
-</span><span class="line">      <span class="p">]</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">  <span class="p">]</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ auth-jcurl name@example.com a4pQnAiprk6-qczS3rn6 http://localhost:3000/api/v1/exercises</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>Let me know in the comments below if you found this helpful, or can suggest any improvements.</p>
 
