@@ -224,9 +224,13 @@ markup later and send them to this action via an AJAX POST.</p>
 <span class="line-number">21</span>
 <span class="line-number">22</span>
 <span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
 </pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">ThingsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
 </span><span class="line">
-</span><span class="line">  <span class="c1">### snip</span>
+</span><span class="line">  <span class="k">def</span> <span class="nf">index</span>
+</span><span class="line">    <span class="vi">@things</span> <span class="o">=</span> <span class="no">Thing</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="ss">:row_order</span><span class="p">)</span><span class="o">.</span><span class="n">all</span>
+</span><span class="line">  <span class="k">end</span>
 </span><span class="line">
 </span><span class="line">  <span class="k">def</span> <span class="nf">update_row_order</span>
 </span><span class="line">    <span class="vi">@thing</span> <span class="o">=</span> <span class="no">Thing</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">thing_params</span><span class="o">[</span><span class="ss">:thing_id</span><span class="o">]</span><span class="p">)</span>

@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-10-16T21:52:07+11:00</updated>
+ <updated>2014-11-18T13:36:28+11:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -327,9 +327,13 @@ markup later and send them to this action via an AJAX POST.&lt;/p&gt;
 &lt;span class=&quot;line-number&quot;&gt;21&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;22&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;23&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;24&lt;/span&gt;
+&lt;span class=&quot;line-number&quot;&gt;25&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThingsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;c1&quot;&gt;### snip&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@things&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:row_order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update_row_order&lt;/span&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;vi&quot;&gt;@thing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Thing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;thing_params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:thing_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
