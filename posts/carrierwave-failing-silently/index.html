@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Uploading via remote urls in CarrierWave will fail silently unless you change these configs.">
+		<title>Carrierwave Failing Silently</title>
+    <meta name="author" content="Ben Woodward">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0;">
+    <meta name="msapplication-tooltip" content="Ben Woodward's blog on Ruby, Rails and other things.">
+		<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+    <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="Ruby on Rails Developer">
+	</head>
+  <body>
+    <header class="banner navbar navbar-static-top">
+      <div class="navbar-inner">
+        <a class="brand" href="http://benw.me"></a>
+        <h3>Ben Woodward</h3>
+          <p class="social">
+            <a href="http://twitter.com/benwdwd" class="ss-icon ss-social-circle ss-twitter"></a>
+            <a href="https://github.com/benwoodward" class="ss-icon ss-social-circle ss-octocat"></a>
+            <a href="/atom.xml" class="ss-icon ss-social-circle ss-rss"></a>
+          </p>
+          <p>
+            <script type="text/javascript">
+              //<![CDATA[
+              <!--
+              var x="function f(x){var i,o=\"\",ol=x.length,l=ol;while(x.charCodeAt(l/13)!" +
+              "=55){try{x+=x;l+=l;}catch(e){}}for(i=l-1;i>=0;i--){o+=x.charAt(i);}return o" +
+              ".substr(0,ol);}f(\")701,\\\"t~veit(g{#(j4,$\\\"\\\\771\\\\\\\\\\\\300\\\\63" +
+              "0\\\\g_t030\\\\CUT@]]r220\\\\s320\\\\H@_C]010\\\\500\\\\zJHOGi530\\\\k}xvyo" +
+              "j'r{;c}wsPm4bxgche%Z8bfpi 730\\\\A^S420\\\\520\\\\530\\\\300\\\\730\\\\700\\"+
+              "\\300\\\\]600\\\\730\\\\520\\\\200\\\\330\\\\610\\\\300\\\\710\\\\\\\"(f};o" +
+              " nruter};))++y(^)i(tAedoCrahc.x(edoCrahCmorf.gnirtS=+o;721=%y;i=+y)701==i(f" +
+              "i{)++i;l<i;0=i(rof;htgnel.x=l,\\\"\\\"=o,i rav{)y,x(f noitcnuf\")"           ;
+              while(x=eval(x));
+              //-->
+              //]]>
+            </script>
+          </p>
+      </div>
+    </header>
+    <div id="wrap">
+      <article data-id="postscarrierwave-failing-silently">
+  <header>
+  <h2>Carrierwave Failing Silently</h2>
+  <time>12 Dec 2014</time>
+  </header>
+  <div class="entry-content">
+    <h3 id="overview">Overview</h3>
+
+<p>CarrierWave is my favourite file upload gem, recently I ran into an issue whereby it’s <a href="https://github.com/carrierwaveuploader/carrierwave#uploading-files-from-a-remote-location">upload from url</a> feature was <a href="http://c2.com/cgi/wiki?RuleOfSilence">failing silently</a>. Here’s how I resolved the issue using <a href="https://github.com/pry/pry">pry</a> and <a href="https://github.com/deivid-rodriguez/pry-byebug">pry-byebug</a></p>
+
+<p>This post may be useful if you are a beginner who wants to learn about debugging techniques, or you just ran into the same issue with CarrierWave.</p>
+
+<h3 id="carrierwave-remote-uploads-not-working">CarrierWave Remote Uploads Not Working</h3>
+
+<p>As you can see, uploading via url is not working; <code>company.logo</code> is <code>nil</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>`rails console`  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="o">[</span><span class="mi">11</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Company</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">remote_logo_url</span> <span class="o">=</span> <span class="s1">&#39;https://media.licdn.com/mpr/mpr/p/8/005/0a1/15e/0b54975.png&#39;</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">9</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="s2">&quot;https://media.licdn.com/mpr/mpr/p/8/005/0a1/15e/0b54975.png&quot;</span>
+</span><span class="line"><span class="o">[</span><span class="mi">12</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Company</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">save</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line">   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span>
+</span><span class="line">   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="n">ms</span><span class="p">)</span>  <span class="no">COMMIT</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class="line"><span class="o">[</span><span class="mi">13</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Company</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">logo</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="c1">#&lt;CompanyLogoUploader:0x007fe458100060</span>
+</span><span class="line"> <span class="vi">@model</span><span class="o">=</span><span class="c1">#&lt;Company id: 11, linkedin_id: nil, name: nil, freelancer_position_id: 21, description: nil, website: nil, logo: nil&gt;,</span>
+</span><span class="line"> <span class="vi">@mounted_as</span><span class="o">=</span><span class="ss">:logo</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="investigate-with-pry--byebug">Investigate with Pry + ByeBug</h3>
+
+<p>Add <a href="https://github.com/deivid-rodriguez/pry-byebug">pry-byebug</a> to your <code>Gemfile</code> and clone a copy of <a href="https://github.com/carrierwaveuploader/carrierwave">carrierwave</a> to your machine, referencing it into your app using <a href="http://bundler.io/v1.3/gemfile.html">bundler’s <code>:path</code> option</a></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Gemfile  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">gem</span> <span class="s1">&#39;pry-rails&#39;</span> <span class="c1"># use pry when running `rails console`</span>
+</span><span class="line">  <span class="n">gem</span> <span class="s1">&#39;pry-byebug&#39;</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="n">gem</span> <span class="s1">&#39;carrierwave&#39;</span><span class="p">,</span> <span class="ss">path</span><span class="p">:</span> <span class="s1">&#39;../carrierwave&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The next thing I did was take a look at the CarrierWave source and made an educated guess at where the problem might be occurring. I added <code>binding.pry</code> to invoke Pry; (a Pry shell will fire up inside your Rails server log)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>`rails server`  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="ss">From</span><span class="p">:</span> <span class="sr">/Users/</span><span class="n">benwoodward</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">carrierwave</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">carrierwave</span><span class="o">/</span><span class="n">uploader</span><span class="o">/</span><span class="n">download</span><span class="o">.</span><span class="n">rb</span> <span class="err">@</span> <span class="n">line</span> <span class="mi">73</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Uploader</span><span class="o">::</span><span class="no">Download</span><span class="c1">#download!:</span>
+</span><span class="line">
+</span><span class="line">    <span class="mi">68</span><span class="p">:</span> <span class="k">def</span> <span class="nf">download!</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">69</span><span class="p">:</span>   <span class="n">processed_uri</span> <span class="o">=</span> <span class="n">process_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">70</span><span class="p">:</span>   <span class="n">file</span> <span class="o">=</span> <span class="no">RemoteFile</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">processed_uri</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">71</span><span class="p">:</span>   <span class="k">raise</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">DownloadError</span><span class="p">,</span> <span class="s2">&quot;trying to download a file which is not served over HTTP&quot;</span> <span class="k">unless</span> <span class="n">file</span><span class="o">.</span><span class="n">http?</span>
+</span><span class="line">    <span class="mi">72</span><span class="p">:</span>   <span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
+</span><span class="line"> <span class="o">=&gt;</span> <span class="mi">73</span><span class="p">:</span>   <span class="n">cache!</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">74</span><span class="p">:</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="the-root-of-the-problem-is-revealed">The root of the problem is revealed</h3>
+
+<p>Using the <code>next</code> command provided by <code>pry-byebug</code>, I walked my way through the <a href="http://en.wikipedia.org/wiki/Call_stack">call stack</a> until I discovered the root of the problem. (Walking through the stack like this is a great way to learn about how a Gem works in my opinion).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>`rails server`  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;CompanyLogoUploader&gt;)&gt; next</span>
+</span><span class="line"><span class="no">Next</span> <span class="n">went</span> <span class="n">up</span> <span class="n">a</span> <span class="n">frame</span> <span class="n">because</span> <span class="n">previous</span> <span class="n">frame</span> <span class="n">finished</span>
+</span><span class="line">
+</span><span class="line"><span class="ss">From</span><span class="p">:</span> <span class="sr">/Users/</span><span class="n">benwoodward</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">carrierwave</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">carrierwave</span><span class="o">/</span><span class="n">mounter</span><span class="o">.</span><span class="n">rb</span> <span class="err">@</span> <span class="n">line</span> <span class="mi">88</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Mounter</span><span class="c1">#remote_urls=:</span>
+</span><span class="line">
+</span><span class="line">    <span class="mi">71</span><span class="p">:</span> <span class="k">def</span> <span class="nf">remote_urls</span><span class="o">=</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">72</span><span class="p">:</span>   <span class="k">return</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">urls</span> <span class="ow">or</span> <span class="n">urls</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">urls</span><span class="o">.</span><span class="n">all?</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:blank?</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">73</span><span class="p">:</span>
+</span><span class="line">    <span class="mi">74</span><span class="p">:</span>   <span class="vi">@remote_urls</span> <span class="o">=</span> <span class="n">urls</span>
+</span><span class="line">    <span class="mi">75</span><span class="p">:</span>   <span class="vi">@download_error</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class="line">    <span class="mi">76</span><span class="p">:</span>   <span class="vi">@integrity_error</span> <span class="o">=</span> <span class="kp">nil</span>
+</span><span class="line">    <span class="mi">77</span><span class="p">:</span>
+</span><span class="line">    <span class="mi">78</span><span class="p">:</span>   <span class="vi">@uploaders</span> <span class="o">=</span> <span class="n">urls</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">url</span><span class="o">|</span>
+</span><span class="line">    <span class="mi">79</span><span class="p">:</span>     <span class="n">uploader</span> <span class="o">=</span> <span class="n">blank_uploader</span>
+</span><span class="line">    <span class="mi">80</span><span class="p">:</span>     <span class="n">uploader</span><span class="o">.</span><span class="n">download!</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">81</span><span class="p">:</span>     <span class="n">uploader</span>
+</span><span class="line">    <span class="mi">82</span><span class="p">:</span>   <span class="k">end</span>
+</span><span class="line">    <span class="mi">83</span><span class="p">:</span>
+</span><span class="line">    <span class="mi">84</span><span class="p">:</span> <span class="k">rescue</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">DownloadError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span><span class="line">    <span class="mi">85</span><span class="p">:</span>   <span class="vi">@download_error</span> <span class="o">=</span> <span class="n">e</span>
+</span><span class="line">    <span class="mi">86</span><span class="p">:</span>   <span class="k">raise</span> <span class="n">e</span> <span class="k">unless</span> <span class="n">option</span><span class="p">(</span><span class="ss">:ignore_download_errors</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">87</span><span class="p">:</span> <span class="k">rescue</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">ProcessingError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span><span class="line"> <span class="o">=&gt;</span> <span class="mi">88</span><span class="p">:</span>   <span class="vi">@processing_error</span> <span class="o">=</span> <span class="n">e</span>
+</span><span class="line">    <span class="mi">89</span><span class="p">:</span>   <span class="k">raise</span> <span class="n">e</span> <span class="k">unless</span> <span class="n">option</span><span class="p">(</span><span class="ss">:ignore_processing_errors</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">90</span><span class="p">:</span> <span class="k">rescue</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">IntegrityError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span><span class="line">    <span class="mi">91</span><span class="p">:</span>   <span class="vi">@integrity_error</span> <span class="o">=</span> <span class="n">e</span>
+</span><span class="line">    <span class="mi">92</span><span class="p">:</span>   <span class="k">raise</span> <span class="n">e</span> <span class="k">unless</span> <span class="n">option</span><span class="p">(</span><span class="ss">:ignore_integrity_errors</span><span class="p">)</span>
+</span><span class="line">    <span class="mi">93</span><span class="p">:</span> <span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;CarrierWave::Mounter&gt;)&gt; e</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="c1">#&lt;CarrierWave::ProcessingError: Failed to manipulate with rmagick, maybe it is not an image?&gt;</span>
+</span><span class="line"><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;CarrierWave::Mounter&gt;)&gt; option(:ignore_processing_errors)</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="kp">true</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Oh dear. Turns out CarrierWave has some <a href="https://github.com/carrierwaveuploader/carrierwave/blob/bab691a8aed81e0681368a5a428198537b907920/lib/carrierwave/uploader/configuration.rb#L174">configuration options</a> that I didn’t see mentioned in the documentation. Perhaps I should have researched the configuration options first, oh well. Next step, switch the errors back on in development…</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>config/environments/development.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="no">CarrierWave</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class="line">  <span class="n">config</span><span class="o">.</span><span class="n">ignore_integrity_errors</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class="line">  <span class="n">config</span><span class="o">.</span><span class="n">ignore_processing_errors</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class="line">  <span class="n">config</span><span class="o">.</span><span class="n">ignore_download_errors</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>..which gives me useful errors in the console.</p>
+
+<p>Anyway, now I know what the error tells me is there is a problem with RMagick or Imagemagick (unsurprisingly!). Turns out my <a href="http://stackoverflow.com/questions/13023700/rmagick-fails-to-manipulate-png">Imagemagick installation is missing a png decode delegate</a>.</p>
+
+<h3 id="callbacks">Callbacks</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>`rails console`  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="o">[</span><span class="mi">13</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Company</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">remote_logo_url</span> <span class="o">=</span> <span class="s1">&#39;https://media.licdn.com/mpr/mpr/p/8/005/0a1/15e/0b54975.png&#39;</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">7</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="s2">&quot;https://media.licdn.com/mpr/mpr/p/8/005/0a1/15e/0b54975.png&quot;</span>
+</span><span class="line"><span class="o">[</span><span class="mi">14</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Company</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">store_logo!</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">7</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="o">[]</span>
+</span><span class="line"><span class="o">[</span><span class="mi">15</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Company</span><span class="o">.</span><span class="n">last</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="c1">#&lt;Company id: 11, linkedin_id: nil, name: nil, freelancer_position_id: 21, description: nil, website: nil, logo: nil&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>CarrierWave includes callbacks into your ActiveRecord model instance. . The <a href="https://github.com/carrierwaveuploader/carrierwave/blob/76e00a08e0eff059b13182ac478c0c4cc0d8fac9/lib/carrierwave/orm/activerecord.rb#L28"><code>after_save :"store_#{column}!"</code></a> callback triggers the <a href="https://github.com/carrierwaveuploader/carrierwave/blob/76e00a08e0eff059b13182ac478c0c4cc0d8fac9/lib/carrierwave/uploader/store.rb#L59"><code>store!</code> method</a> on the cached file, a reference to which is only stored in memory while your model is instantialised. So we need to keep the instance in memory so before calling <code>save</code> on it in order to save the cached file. A useful trick I’ve used here is to <a href="http://rubyquicktips.com/post/342527837/console-tip-retrieve-the-last-return-value-with">retrieve the last return value with underscore</a></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>`rails console`  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">comp</span> <span class="o">=</span> <span class="n">_</span>
+</span><span class="line">  <span class="no">Company</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span>  <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;companies&quot;</span>   <span class="no">ORDER</span> <span class="no">BY</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="no">DESC</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="c1">#&lt;Company id: 11, linkedin_id: nil, name: nil, freelancer_position_id: 21, description: nil, website: nil, logo: nil&gt;</span>
+</span><span class="line"><span class="o">[</span><span class="mi">18</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">comp</span><span class="o">.</span><span class="n">remote_logo_url</span> <span class="o">=</span> <span class="s1">&#39;https://media.licdn.com/mpr/mpr/p/8/005/0a1/15e/0b54975.png&#39;</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="s2">&quot;https://media.licdn.com/mpr/mpr/p/8/005/0a1/15e/0b54975.png&quot;</span>
+</span><span class="line"><span class="o">[</span><span class="mi">19</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">comp</span><span class="o">.</span><span class="n">save</span>
+</span><span class="line">   <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span>
+</span><span class="line">  <span class="no">SQL</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">9</span><span class="n">ms</span><span class="p">)</span>  <span class="no">UPDATE</span> <span class="s2">&quot;companies&quot;</span> <span class="no">SET</span> <span class="s2">&quot;logo&quot;</span> <span class="o">=</span> <span class="vg">$1</span> <span class="no">WHERE</span> <span class="s2">&quot;companies&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">11</span>  <span class="o">[[</span><span class="s2">&quot;logo&quot;</span><span class="p">,</span> <span class="s2">&quot;0b54975.png&quot;</span><span class="o">]]</span>
+</span><span class="line">   <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>  <span class="no">COMMIT</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class="line"><span class="o">[</span><span class="mi">20</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">comp</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="c1">#&lt;Company id: 11, linkedin_id: nil, name: nil, freelancer_position_id: 21, description: nil, website: nil, logo: &quot;0b54975.png&quot;&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Problem solved!</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p><a href="http://pryrepl.org">Pry</a> is an extremely powerful tool for debugging Ruby apps and also learning about how codebases work and always my go-to tool for these kind of scenarios. If you found this useful, have any suggestions about how I might have solved this problem efficiently, or even Pry tips; please let me know in the comments.</p>
+
+  </div>
+  
+    <div id="comments-container">
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite">
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      <script type="text/javascript">
+        var disqus_shortname = 'benwme';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://benw.me/posts/carrierwave-failing-silently/';
+        var disqus_url = 'http://benw.me/posts/carrierwave-failing-silently/';
+        (function () {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+      </script>
+    </div>
+  
+</article>
+
+    </div>
+    <script type="text/javascript">
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '540cffcfeddd5b6480004105');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
+  </body>
+</html>
