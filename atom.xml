@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2014-12-12T16:49:18+11:00</updated>
+ <updated>2015-04-27T16:11:04+10:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -257,7 +257,7 @@
    <id>http://jgthms.com/posts/colourized-pretty-printed-json-with-curl</id>
    <content type="html">&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
 
-&lt;p&gt;Working with APIs I do a lot of manual testing on the command line using cURL. Typing out &lt;/p&gt;
+&lt;p&gt;Working with APIs I do a lot of manual testing on the command line using cURL. Typing out&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;curl -H &quot;Accept: application/json&quot; -H &quot;Content-Type: application/json&quot; -H &quot;X-User-Email: name@example.com&quot; -H &quot;X-User-Token: a4pQnAiprk6-qczS3rn6&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
@@ -341,7 +341,7 @@
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jcurl http://localhost:3000/api/v1/exercises
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;Let’s modify the jcurl function a bit. If we replace the &lt;code&gt;$1&lt;/code&gt; shell variable, which takes the first argument from the command line as input, and replace it with &lt;code&gt;$@&lt;/code&gt;, then it will act like &lt;/p&gt;
+&lt;p&gt;Let’s modify the jcurl function a bit. If we replace the &lt;code&gt;$1&lt;/code&gt; shell variable, which takes the first argument from the command line as input, and replace it with &lt;code&gt;$@&lt;/code&gt;, then it will act like&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;.bash_profile  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -778,7 +778,7 @@ gems.&lt;/p&gt;
 using font size to represent tag usage. Whereas this is a useful tool
 for the user, if you care about good typography and keeping to the grid
 you probably won’t want to include one of these janky things in your
-sidebar. &lt;/p&gt;
+sidebar.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/tag_cloud.png&quot; alt=&quot;tag cloud&quot; title=&quot;Tag Cloud&quot; /&gt;&lt;/p&gt;
 
@@ -793,7 +793,7 @@ approach in using colour to indicate tag popularity.&lt;/p&gt;
 &lt;h3 id=&quot;acts-as-taggable-on&quot;&gt;Acts As Taggable On&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/mbleigh/acts-as-taggable-on&quot;&gt;acts-as-taggable-on&lt;/a&gt; is
-the obvious choice for adding tagging functionality to Rails. &lt;/p&gt;
+the obvious choice for adding tagging functionality to Rails.&lt;/p&gt;
 
 &lt;p&gt;First make your model taggable by following the instructions in the gem
 readme.&lt;/p&gt;

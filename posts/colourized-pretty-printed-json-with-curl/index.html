@@ -15,7 +15,8 @@
     <header class="banner navbar navbar-static-top">
       <div class="navbar-inner">
         <a class="brand" href="http://benw.me"></a>
-        <h3>Ben Woodward</h3>
+        <h1>Ben Woodward</h1>
+          <h2>CTO &amp; Co-Founder of <a href="http://getgravity.co">Gravity</a></h2>
           <p class="social">
             <a href="http://twitter.com/benwdwd" class="ss-icon ss-social-circle ss-twitter"></a>
             <a href="https://github.com/benwoodward" class="ss-icon ss-social-circle ss-octocat"></a>
@@ -49,7 +50,7 @@
   <div class="entry-content">
     <h3 id="overview">Overview</h3>
 
-<p>Working with APIs I do a lot of manual testing on the command line using cURL. Typing out </p>
+<p>Working with APIs I do a lot of manual testing on the command line using cURL. Typing out</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">curl -H "Accept: application/json" -H "Content-Type: application/json" -H "X-User-Email: name@example.com" -H "X-User-Token: a4pQnAiprk6-qczS3rn6"</span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -133,7 +134,7 @@
 </pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>jcurl http://localhost:3000/api/v1/exercises
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Let’s modify the jcurl function a bit. If we replace the <code>$1</code> shell variable, which takes the first argument from the command line as input, and replace it with <code>$@</code>, then it will act like </p>
+<p>Let’s modify the jcurl function a bit. If we replace the <code>$1</code> shell variable, which takes the first argument from the command line as input, and replace it with <code>$@</code>, then it will act like</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>.bash_profile  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
