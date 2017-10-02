@@ -4,7 +4,7 @@
  <title>Ben Woodward</title>
  <link href="http://benw.me/atom.xml" rel="self"/>
  <link href="http://benw.me/"/>
- <updated>2015-04-27T16:11:04+10:00</updated>
+ <updated>2017-10-02T20:49:38+11:00</updated>
  <id>http://benw.me/</id>
  <author>
    <name>JT</name>
@@ -25,7 +25,7 @@
 
 &lt;h3 id=&quot;carrierwave-remote-uploads-not-working&quot;&gt;CarrierWave Remote Uploads Not Working&lt;/h3&gt;
 
-&lt;p&gt;As you can see, uploading via url is not working; &lt;code&gt;company.logo&lt;/code&gt; is &lt;code&gt;nil&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As you can see, uploading via url is not working; &lt;code class=&quot;highlighter-rouge&quot;&gt;company.logo&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;.&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;`rails console`  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -58,7 +58,7 @@
 
 &lt;h3 id=&quot;investigate-with-pry--byebug&quot;&gt;Investigate with Pry + ByeBug&lt;/h3&gt;
 
-&lt;p&gt;Add &lt;a href=&quot;https://github.com/deivid-rodriguez/pry-byebug&quot;&gt;pry-byebug&lt;/a&gt; to your &lt;code&gt;Gemfile&lt;/code&gt; and clone a copy of &lt;a href=&quot;https://github.com/carrierwaveuploader/carrierwave&quot;&gt;carrierwave&lt;/a&gt; to your machine, referencing it into your app using &lt;a href=&quot;http://bundler.io/v1.3/gemfile.html&quot;&gt;bundler’s &lt;code&gt;:path&lt;/code&gt; option&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Add &lt;a href=&quot;https://github.com/deivid-rodriguez/pry-byebug&quot;&gt;pry-byebug&lt;/a&gt; to your &lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt; and clone a copy of &lt;a href=&quot;https://github.com/carrierwaveuploader/carrierwave&quot;&gt;carrierwave&lt;/a&gt; to your machine, referencing it into your app using &lt;a href=&quot;http://bundler.io/v1.3/gemfile.html&quot;&gt;bundler’s &lt;code class=&quot;highlighter-rouge&quot;&gt;:path&lt;/code&gt; option&lt;/a&gt;&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Gemfile  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -75,7 +75,7 @@
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;carrierwave&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;../carrierwave&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;The next thing I did was take a look at the CarrierWave source and made an educated guess at where the problem might be occurring. I added &lt;code&gt;binding.pry&lt;/code&gt; to invoke Pry; (a Pry shell will fire up inside your Rails server log)&lt;/p&gt;
+&lt;p&gt;The next thing I did was take a look at the CarrierWave source and made an educated guess at where the problem might be occurring. I added &lt;code class=&quot;highlighter-rouge&quot;&gt;binding.pry&lt;/code&gt; to invoke Pry; (a Pry shell will fire up inside your Rails server log)&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;`rails server`  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -100,7 +100,7 @@
 
 &lt;h3 id=&quot;the-root-of-the-problem-is-revealed&quot;&gt;The root of the problem is revealed&lt;/h3&gt;
 
-&lt;p&gt;Using the &lt;code&gt;next&lt;/code&gt; command provided by &lt;code&gt;pry-byebug&lt;/code&gt;, I walked my way through the &lt;a href=&quot;http://en.wikipedia.org/wiki/Call_stack&quot;&gt;call stack&lt;/a&gt; until I discovered the root of the problem. (Walking through the stack like this is a great way to learn about how a Gem works in my opinion).&lt;/p&gt;
+&lt;p&gt;Using the &lt;code class=&quot;highlighter-rouge&quot;&gt;next&lt;/code&gt; command provided by &lt;code class=&quot;highlighter-rouge&quot;&gt;pry-byebug&lt;/code&gt;, I walked my way through the &lt;a href=&quot;http://en.wikipedia.org/wiki/Call_stack&quot;&gt;call stack&lt;/a&gt; until I discovered the root of the problem. (Walking through the stack like this is a great way to learn about how a Gem works in my opinion).&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;`rails server`  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -213,7 +213,7 @@
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#&amp;lt;Company id: 11, linkedin_id: nil, name: nil, freelancer_position_id: 21, description: nil, website: nil, logo: nil&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;CarrierWave includes callbacks into your ActiveRecord model instance. . The &lt;a href=&quot;https://github.com/carrierwaveuploader/carrierwave/blob/76e00a08e0eff059b13182ac478c0c4cc0d8fac9/lib/carrierwave/orm/activerecord.rb#L28&quot;&gt;&lt;code&gt;after_save :&quot;store_#{column}!&quot;&lt;/code&gt;&lt;/a&gt; callback triggers the &lt;a href=&quot;https://github.com/carrierwaveuploader/carrierwave/blob/76e00a08e0eff059b13182ac478c0c4cc0d8fac9/lib/carrierwave/uploader/store.rb#L59&quot;&gt;&lt;code&gt;store!&lt;/code&gt; method&lt;/a&gt; on the cached file, a reference to which is only stored in memory while your model is instantialised. So we need to keep the instance in memory so before calling &lt;code&gt;save&lt;/code&gt; on it in order to save the cached file. A useful trick I’ve used here is to &lt;a href=&quot;http://rubyquicktips.com/post/342527837/console-tip-retrieve-the-last-return-value-with&quot;&gt;retrieve the last return value with underscore&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;CarrierWave includes callbacks into your ActiveRecord model instance. . The &lt;a href=&quot;https://github.com/carrierwaveuploader/carrierwave/blob/76e00a08e0eff059b13182ac478c0c4cc0d8fac9/lib/carrierwave/orm/activerecord.rb#L28&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;after_save :&quot;store_#{column}!&quot;&lt;/code&gt;&lt;/a&gt; callback triggers the &lt;a href=&quot;https://github.com/carrierwaveuploader/carrierwave/blob/76e00a08e0eff059b13182ac478c0c4cc0d8fac9/lib/carrierwave/uploader/store.rb#L59&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;store!&lt;/code&gt; method&lt;/a&gt; on the cached file, a reference to which is only stored in memory while your model is instantialised. So we need to keep the instance in memory so before calling &lt;code class=&quot;highlighter-rouge&quot;&gt;save&lt;/code&gt; on it in order to save the cached file. A useful trick I’ve used here is to &lt;a href=&quot;http://rubyquicktips.com/post/342527837/console-tip-retrieve-the-last-return-value-with&quot;&gt;retrieve the last return value with underscore&lt;/a&gt;&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;`rails console`  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -293,21 +293,21 @@
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;pip install pygments&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;Alternatively, you can install Pygments using Python’s built in &lt;code&gt;easy_install&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Alternatively, you can install Pygments using Python’s built in &lt;code class=&quot;highlighter-rouge&quot;&gt;easy_install&lt;/code&gt;&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;sudo easy_install pygments&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
 &lt;p&gt;You may need to reload your shell, so that $PATH is reloaded, I normally just create a new Terminal tab to do this.&lt;/p&gt;
 
-&lt;p&gt;Now we can pipe our JSON through the &lt;code&gt;pygmentize&lt;/code&gt; tool that comes with pygments. It’s normally installed to &lt;code&gt;/usr/local/bin&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Now we can pipe our JSON through the &lt;code class=&quot;highlighter-rouge&quot;&gt;pygmentize&lt;/code&gt; tool that comes with pygments. It’s normally installed to &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/bin&lt;/code&gt;:&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;span class=&quot;line-number&quot;&gt;2&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;$ which pygmentize
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;/usr/local/bin/pygmentize&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;Don’t forget to specify json as the lexer for pygmentize with &lt;code&gt;-l json&lt;/code&gt;…&lt;/p&gt;
+&lt;p&gt;Don’t forget to specify json as the lexer for pygmentize with &lt;code class=&quot;highlighter-rouge&quot;&gt;-l json&lt;/code&gt;…&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt; &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl http://localhost:3000/api/v1/exercises &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; json &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pygmentize -l json
@@ -341,7 +341,7 @@
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jcurl http://localhost:3000/api/v1/exercises
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;Let’s modify the jcurl function a bit. If we replace the &lt;code&gt;$1&lt;/code&gt; shell variable, which takes the first argument from the command line as input, and replace it with &lt;code&gt;$@&lt;/code&gt;, then it will act like&lt;/p&gt;
+&lt;p&gt;Let’s modify the jcurl function a bit. If we replace the &lt;code class=&quot;highlighter-rouge&quot;&gt;$1&lt;/code&gt; shell variable, which takes the first argument from the command line as input, and replace it with &lt;code class=&quot;highlighter-rouge&quot;&gt;$@&lt;/code&gt;, then it will act like&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;figcaption&gt;&lt;span&gt;.bash_profile  &lt;/span&gt;&lt;/figcaption&gt;
  &lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
@@ -354,7 +354,7 @@
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; -f jcurl
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;This allows us to pass more than one option to &lt;code&gt;jcurl&lt;/code&gt; ..For example, if we wanted to pass headers..&lt;/p&gt;
+&lt;p&gt;This allows us to pass more than one option to &lt;code class=&quot;highlighter-rouge&quot;&gt;jcurl&lt;/code&gt; ..For example, if we wanted to pass headers..&lt;/p&gt;
 
 &lt;div class=&quot;bogus-wrapper&quot;&gt;&lt;notextile&gt;&lt;figure class=&quot;code&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class=&quot;line-number&quot;&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;&lt;span class=&quot;line&quot;&gt;jcurl -H &quot;X-User-Token: a4pQnAiprk6-qczS3rn6&quot; -H &quot;X-User-Email: name@example.com&quot; http://localhost:3000/api/v1/exercises&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
@@ -372,7 +372,7 @@
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; -f auth-jcurl
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code&gt;${@:3}&lt;/code&gt; is the array of command line arguments minus the first 2, (because we’ve already used them with &lt;code&gt;$1&lt;/code&gt; and &lt;code&gt;$2&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;${@:3}&lt;/code&gt; is the array of command line arguments minus the first 2, (because we’ve already used them with &lt;code class=&quot;highlighter-rouge&quot;&gt;$1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;$2&lt;/code&gt;).&lt;/p&gt;
 
 &lt;p&gt;We can now pass the username and access token to cURL and any additional options (which will be picked up by “$@”)&lt;/p&gt;
 
@@ -801,7 +801,7 @@ readme.&lt;/p&gt;
 &lt;p&gt;The gem creates two ActiveRecord models; Tag and Tagging, the latter is
 an association model.&lt;/p&gt;
 
-&lt;p&gt;We need to add a new attribute, &lt;code&gt;:tint&lt;/code&gt; to
+&lt;p&gt;We need to add a new attribute, &lt;code class=&quot;highlighter-rouge&quot;&gt;:tint&lt;/code&gt; to
 the Tag model. This is where we will save a generated hex code that
 represents the popularity of the tag.&lt;/p&gt;
 
@@ -974,7 +974,7 @@ represents the popularity of the tag.&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;aftersave-filter&quot;&gt;after_save Filter&lt;/h3&gt;
+&lt;h3 id=&quot;after_save-filter&quot;&gt;after_save Filter&lt;/h3&gt;
 
 &lt;p&gt;Depending on how many taggings you have, this is a potentially expensive
 operation. One option would be to use a task scheduler such as
@@ -1079,7 +1079,7 @@ tags can be passed as parameters to a search via the url.&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  ...
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  def by_tag
-&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    @posts = Post.tagged_with(params[:tag]).order(&#39;created_at desc&#39;)
+&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;    @posts = Post.tagged_with(params[:tag]).order('created_at desc')
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  end
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;line&quot;&gt;  ...

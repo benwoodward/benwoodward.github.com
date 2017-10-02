@@ -16,28 +16,10 @@
       <div class="navbar-inner">
         <a class="brand" href="http://benw.me"></a>
         <h1>Ben Woodward</h1>
-          <h2>CTO &amp; Co-Founder of <a href="http://getgravity.co">Gravity</a></h2>
           <p class="social">
             <a href="http://twitter.com/benwdwd" class="ss-icon ss-social-circle ss-twitter"></a>
             <a href="https://github.com/benwoodward" class="ss-icon ss-social-circle ss-octocat"></a>
             <a href="/atom.xml" class="ss-icon ss-social-circle ss-rss"></a>
-          </p>
-          <p>
-            <script type="text/javascript">
-              //<![CDATA[
-              <!--
-              var x="function f(x){var i,o=\"\",ol=x.length,l=ol;while(x.charCodeAt(l/13)!" +
-              "=55){try{x+=x;l+=l;}catch(e){}}for(i=l-1;i>=0;i--){o+=x.charAt(i);}return o" +
-              ".substr(0,ol);}f(\")701,\\\"t~veit(g{#(j4,$\\\"\\\\771\\\\\\\\\\\\300\\\\63" +
-              "0\\\\g_t030\\\\CUT@]]r220\\\\s320\\\\H@_C]010\\\\500\\\\zJHOGi530\\\\k}xvyo" +
-              "j'r{;c}wsPm4bxgche%Z8bfpi 730\\\\A^S420\\\\520\\\\530\\\\300\\\\730\\\\700\\"+
-              "\\300\\\\]600\\\\730\\\\520\\\\200\\\\330\\\\610\\\\300\\\\710\\\\\\\"(f};o" +
-              " nruter};))++y(^)i(tAedoCrahc.x(edoCrahCmorf.gnirtS=+o;721=%y;i=+y)701==i(f" +
-              "i{)++i;l<i;0=i(rof;htgnel.x=l,\\\"\\\"=o,i rav{)y,x(f noitcnuf\")"           ;
-              while(x=eval(x));
-              //-->
-              //]]>
-            </script>
           </p>
       </div>
     </header>
@@ -86,21 +68,21 @@
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">pip install pygments</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Alternatively, you can install Pygments using Python’s built in <code>easy_install</code></p>
+<p>Alternatively, you can install Pygments using Python’s built in <code class="highlighter-rouge">easy_install</code></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">sudo easy_install pygments</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>You may need to reload your shell, so that $PATH is reloaded, I normally just create a new Terminal tab to do this.</p>
 
-<p>Now we can pipe our JSON through the <code>pygmentize</code> tool that comes with pygments. It’s normally installed to <code>/usr/local/bin</code>:</p>
+<p>Now we can pipe our JSON through the <code class="highlighter-rouge">pygmentize</code> tool that comes with pygments. It’s normally installed to <code class="highlighter-rouge">/usr/local/bin</code>:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">$ which pygmentize
 </span><span class="line">/usr/local/bin/pygmentize</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Don’t forget to specify json as the lexer for pygmentize with <code>-l json</code>…</p>
+<p>Don’t forget to specify json as the lexer for pygmentize with <code class="highlighter-rouge">-l json</code>…</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>curl http://localhost:3000/api/v1/exercises <span class="p">|</span> json <span class="p">|</span> pygmentize -l json
@@ -134,7 +116,7 @@
 </pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>jcurl http://localhost:3000/api/v1/exercises
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Let’s modify the jcurl function a bit. If we replace the <code>$1</code> shell variable, which takes the first argument from the command line as input, and replace it with <code>$@</code>, then it will act like</p>
+<p>Let’s modify the jcurl function a bit. If we replace the <code class="highlighter-rouge">$1</code> shell variable, which takes the first argument from the command line as input, and replace it with <code class="highlighter-rouge">$@</code>, then it will act like</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>.bash_profile  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -147,7 +129,7 @@
 </span><span class="line"><span class="nb">export</span> -f jcurl
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>This allows us to pass more than one option to <code>jcurl</code> ..For example, if we wanted to pass headers..</p>
+<p>This allows us to pass more than one option to <code class="highlighter-rouge">jcurl</code> ..For example, if we wanted to pass headers..</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">jcurl -H "X-User-Token: a4pQnAiprk6-qczS3rn6" -H "X-User-Email: name@example.com" http://localhost:3000/api/v1/exercises</span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -165,7 +147,7 @@
 </span><span class="line"><span class="nb">export</span> -f auth-jcurl
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><code>${@:3}</code> is the array of command line arguments minus the first 2, (because we’ve already used them with <code>$1</code> and <code>$2</code>).</p>
+<p><code class="highlighter-rouge">${@:3}</code> is the array of command line arguments minus the first 2, (because we’ve already used them with <code class="highlighter-rouge">$1</code> and <code class="highlighter-rouge">$2</code>).</p>
 
 <p>We can now pass the username and access token to cURL and any additional options (which will be picked up by “$@”)</p>
 
@@ -197,18 +179,5 @@
 </article>
 
     </div>
-    <script type="text/javascript">
-      var _gauges = _gauges || [];
-      (function() {
-        var t   = document.createElement('script');
-        t.type  = 'text/javascript';
-        t.async = true;
-        t.id    = 'gauges-tracker';
-        t.setAttribute('data-site-id', '540cffcfeddd5b6480004105');
-        t.src = '//secure.gaug.es/track.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(t, s);
-      })();
-    </script>
   </body>
 </html>
